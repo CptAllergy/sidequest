@@ -3,10 +3,13 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 // Import the generated route tree
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import SuperTokens from "supertokens-auth-react";
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
+import { SuperTokensConfig } from "@/lib/config.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -17,6 +20,11 @@ const router = createRouter({
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
 });
+
+const queryClient = new QueryClient();
+
+// Initialize SuperTokens - ideally in the global scope
+SuperTokens.init(SuperTokensConfig);
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
@@ -31,7 +39,9 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </StrictMode>,
   );
 }

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import logo from "../logo.svg";
@@ -71,6 +71,7 @@ function App() {
         <Summary />
         <ActiveQuest />
         <QuestBoardPreview />
+        <Link to="/auth/$">Login</Link>
         <div className="h-52"></div>
       </div>
     </div>

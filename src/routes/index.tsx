@@ -19,7 +19,7 @@ function App() {
   // TODO: placeholder test code
 
   const addQuest = () => {
-    fetch(process.env.BACKEND_URL + "/api/v1/quests", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,7 +90,7 @@ const QuestBoardPreview = () => {
   const [value, setValue] = useState<Quest[]>();
 
   const getQuests = () => {
-    fetch(process.env.BACKEND_URL + "/api/v1/quests")
+    fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`)
       .then((res) => {
         return res.json();
       })

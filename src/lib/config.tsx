@@ -4,21 +4,11 @@ import Session from "supertokens-auth-react/recipe/session";
 import type { JSX } from "react";
 
 // TODO check here what needs to be cleaned up
-export function getApiDomain() {
-  const apiPort = 8080;
-  return `http://localhost:${apiPort}`;
-}
-
-export function getWebsiteDomain() {
-  const websitePort = 3000;
-  return `http://localhost:${websitePort}`;
-}
-
 export const SuperTokensConfig = {
   appInfo: {
     appName: "Sidequest",
-    apiDomain: getApiDomain(),
-    websiteDomain: getWebsiteDomain(),
+    apiDomain: import.meta.env.VITE_API_URL,
+    websiteDomain: import.meta.env.VITE_WEBSITE_URL,
     apiBasePath: "/auth",
     websiteBasePath: "/auth",
   },

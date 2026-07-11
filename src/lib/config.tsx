@@ -1,5 +1,6 @@
 import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
 import { EmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/emailpassword/prebuiltui";
+import ThirdParty, { Google } from "supertokens-auth-react/recipe/thirdparty";
 import Session from "supertokens-auth-react/recipe/session";
 import type { JSX } from "react";
 
@@ -13,17 +14,21 @@ export const SuperTokensConfig = {
     websiteBasePath: "/auth",
   },
 
-  recipeList: [EmailPassword.init(), Session.init()],
+  recipeList: [
+    EmailPassword.init(),
+    ThirdParty.init({
+      signInAndUpFeature: {
+        providers: [Google.init()],
+      },
+    }),
+    Session.init(),
+  ],
   getRedirectionURL: async (context: any) => {
     if (context.action === "SUCCESS") {
       return "/dashboard";
     }
     return undefined;
   },
-};
-
-export const recipeDetails = {
-  docsLink: "https://supertokens.com/docs/quickstart/introduction",
 };
 
 export const PreBuiltUIList = [EmailPasswordPreBuiltUI];

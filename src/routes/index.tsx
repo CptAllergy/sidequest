@@ -92,6 +92,9 @@ const QuestBoardPreview = () => {
   const getQuests = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`)
       .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Response status: ${res.status}`);
+        }
         return res.json();
       })
       .then((data: Quest[]) => {

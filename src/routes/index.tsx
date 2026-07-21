@@ -1,6 +1,7 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useAuth } from "@zitadel/react-auth";
 import logo from "../logo.svg";
 
 export const Route = createFileRoute("/")({
@@ -71,12 +72,22 @@ function App() {
         <Summary />
         <ActiveQuest />
         <QuestBoardPreview />
-        <Link to="/auth/$">Login</Link>
+        <Login />
         <div className="h-52"></div>
       </div>
     </div>
   );
 }
+
+const Login = () => {
+  const auth = useAuth();
+
+  const login = async () => {
+    await auth.signinRedirect();
+  };
+
+  return <button onClick={login}>Login</button>;
+};
 
 const Summary = () => {
   return <div>Summary</div>;
@@ -88,9 +99,17 @@ const ActiveQuest = () => {
 
 const QuestBoardPreview = () => {
   const [value, setValue] = useState<Quest[]>();
+  const auth = useAuth();
 
   const getQuests = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth.user?.access_token
+          ? `Bearer ${auth.user.access_token}`
+          : "",
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Response status: ${res.status}`);

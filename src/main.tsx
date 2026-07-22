@@ -11,6 +11,7 @@ import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import type { AuthProviderProps } from "@zitadel/react-auth";
 import { ZITADEL_SCOPES } from "@/lib/scopes.ts";
+import { NotFound } from "@/components/not-found.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -20,6 +21,7 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  defaultNotFoundComponent: NotFound,
 });
 
 // Register the router instance for type safety

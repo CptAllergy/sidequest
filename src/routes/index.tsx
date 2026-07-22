@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { useAuth } from "@zitadel/react-auth";
 import logo from "../logo.svg";
 
+// TODO add tanstack default error component to absorb errors, it should do something simillar to ErrorBoundary
+
 export const Route = createFileRoute("/")({
   component: App,
 });

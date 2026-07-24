@@ -3,9 +3,11 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@zitadel/react-auth";
 import logo from "../logo.svg";
+import { useProfile } from "@/lib/hooks.ts";
+import SignOutButton from "@/components/sign-out-button.tsx";
 
-// TODO add tanstack default error component to absorb errors, it should do something simillar to ErrorBoundary
-
+// TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
+// TODO make sure routes are properly protected with full user
 export const Route = createFileRoute("/")({
   component: App,
 });
@@ -75,6 +77,7 @@ function App() {
         <ActiveQuest />
         <QuestBoardPreview />
         <Login />
+        <SignOutButton />
         <div className="h-52"></div>
       </div>
     </div>
@@ -92,7 +95,25 @@ const Login = () => {
 };
 
 const Summary = () => {
-  return <div>Summary</div>;
+  const { profile, isPending } = useProfile();
+
+  if (isPending || !profile) {
+    return <div>Loading</div>;
+  }
+
+  return (
+    <div>
+      <h2>Summary</h2>
+      <div>
+        <span>User</span>
+        {profile.user ? (
+          <span>{profile.user.username}</span>
+        ) : (
+          <span>Guest</span>
+        )}
+      </div>
+    </div>
+  );
 };
 
 const ActiveQuest = () => {

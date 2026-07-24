@@ -4,12 +4,13 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 // Import the generated route tree
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// eslint-disable-next-line import/order
+import type { AuthProviderProps } from "@zitadel/react-auth";
 import { AuthProvider } from "@zitadel/react-auth";
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
-import type { AuthProviderProps } from "@zitadel/react-auth";
 import { ZITADEL_SCOPES } from "@/lib/scopes.ts";
 import { NotFound } from "@/components/not-found.tsx";
 
@@ -33,7 +34,7 @@ declare module "@tanstack/react-router" {
 
 const queryClient = new QueryClient();
 
-const cfg: AuthProviderProps = {
+const zitadelConfig: AuthProviderProps = {
   authority: import.meta.env.VITE_ZITADEL_DOMAIN,
   client_id: import.meta.env.VITE_ZITADEL_CLIENT_ID,
   redirect_uri: import.meta.env.VITE_ZITADEL_CALLBACK_URL,
@@ -47,7 +48,7 @@ const cfg: AuthProviderProps = {
       window.location.origin + "/",
     );
     window.location.assign(
-      import.meta.env.VITE_ZITADEL_POST_LOGIN_URL || "/dashboard",
+      import.meta.env.VITE_ZITADEL_POST_LOGIN_URL || "/auth/redirect",
     );
   },
 };
@@ -59,7 +60,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider {...cfg}>
+        <AuthProvider {...zitadelConfig}>
           <RouterProvider router={router} />
         </AuthProvider>
       </QueryClientProvider>

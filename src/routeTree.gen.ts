@@ -9,15 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthErrorRouteImport } from './routes/auth/error'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AuthAccountRouteImport } from './routes/auth/account'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthLogoutCallbackRouteImport } from './routes/auth/logout/callback'
 
-const AppRouteRoute = AppRouteRouteImport.update({
-  id: '/_app',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -35,10 +36,15 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
+const AuthAccountRoute = AuthAccountRouteImport.update({
+  id: '/auth/account',
+  path: '/auth/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => AppRouteRoute,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthLogoutCallbackRoute = AuthLogoutCallbackRouteImport.update({
   id: '/auth/logout/callback',
@@ -48,14 +54,16 @@ const AuthLogoutCallbackRoute = AuthLogoutCallbackRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof AppDashboardRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
@@ -63,8 +71,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_app': typeof AppRouteRouteWithChildren
-  '/_app/dashboard': typeof AppDashboardRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
@@ -74,6 +83,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
     | '/auth/logout/callback'
@@ -81,14 +91,16 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
     | '/auth/logout/callback'
   id:
     | '__root__'
     | '/'
-    | '/_app'
-    | '/_app/dashboard'
+    | '/_authenticated'
+    | '/_authenticated/dashboard'
+    | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
     | '/auth/logout/callback'
@@ -96,7 +108,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRouteRoute: typeof AppRouteRouteWithChildren
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthAccountRoute: typeof AuthAccountRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthErrorRoute: typeof AuthErrorRoute
   AuthLogoutCallbackRoute: typeof AuthLogoutCallbackRoute
@@ -104,11 +117,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_app': {
-      id: '/_app'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof AppRouteRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -132,12 +145,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
+    '/auth/account': {
+      id: '/auth/account'
+      path: '/auth/account'
+      fullPath: '/auth/account'
+      preLoaderRoute: typeof AuthAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof AppRouteRoute
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/auth/logout/callback': {
       id: '/auth/logout/callback'
@@ -149,21 +169,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AppRouteRouteChildren {
-  AppDashboardRoute: typeof AppDashboardRoute
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
 }
 
-const AppRouteRouteChildren: AppRouteRouteChildren = {
-  AppDashboardRoute: AppDashboardRoute,
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
 }
 
-const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
-  AppRouteRouteChildren,
-)
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRouteRoute: AppRouteRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthAccountRoute: AuthAccountRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthErrorRoute: AuthErrorRoute,
   AuthLogoutCallbackRoute: AuthLogoutCallbackRoute,

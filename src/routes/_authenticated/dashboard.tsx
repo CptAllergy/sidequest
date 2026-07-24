@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useAuth } from "@zitadel/react-auth";
 import SignOutButton from "@/components/sign-out-button.tsx";
 
-export const Route = createFileRoute("/_app/dashboard")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 

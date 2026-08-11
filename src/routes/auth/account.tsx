@@ -72,12 +72,11 @@ export const useCreateProfile = () => {
 
   const queryClient = useQueryClient();
 
-  if (!token) {
-    throw new Error("Unauthorized");
-  }
-
   const mutation = useMutation({
     mutationFn: async (username: string) => {
+      if (!token) {
+        throw new Error("Unauthorized");
+      }
       return await createProfile(token, username);
     },
     onSuccess: () => {

@@ -75,7 +75,7 @@ export const useCreateProfile = () => {
   const mutation = useMutation({
     mutationFn: async (username: string) => {
       if (!token) {
-        throw new Error("Unauthorized");
+        throw new Error("Unauthorized without token");
       }
       return await createProfile(token, username);
     },

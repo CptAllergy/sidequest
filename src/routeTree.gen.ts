@@ -16,6 +16,8 @@ import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthAccountRouteImport } from './routes/auth/account'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthLogoutCallbackRouteImport } from './routes/auth/logout/callback'
+import { Route as AuthenticatedQuestsNewRouteImport } from './routes/_authenticated/quests/new'
+import { Route as AuthenticatedQuestsQuestIdRouteImport } from './routes/_authenticated/quests/$questId'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
@@ -51,6 +53,17 @@ const AuthLogoutCallbackRoute = AuthLogoutCallbackRouteImport.update({
   path: '/auth/logout/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedQuestsNewRoute = AuthenticatedQuestsNewRouteImport.update({
+  id: '/quests/new',
+  path: '/quests/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedQuestsQuestIdRoute =
+  AuthenticatedQuestsQuestIdRouteImport.update({
+    id: '/quests/$questId',
+    path: '/quests/$questId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -58,6 +71,8 @@ export interface FileRoutesByFullPath {
   '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
+  '/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
+  '/quests/new': typeof AuthenticatedQuestsNewRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +81,8 @@ export interface FileRoutesByTo {
   '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
+  '/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
+  '/quests/new': typeof AuthenticatedQuestsNewRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
 }
 export interface FileRoutesById {
@@ -76,6 +93,8 @@ export interface FileRoutesById {
   '/auth/account': typeof AuthAccountRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/error': typeof AuthErrorRoute
+  '/_authenticated/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
+  '/_authenticated/quests/new': typeof AuthenticatedQuestsNewRoute
   '/auth/logout/callback': typeof AuthLogoutCallbackRoute
 }
 export interface FileRouteTypes {
@@ -86,6 +105,8 @@ export interface FileRouteTypes {
     | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
+    | '/quests/$questId'
+    | '/quests/new'
     | '/auth/logout/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -94,6 +115,8 @@ export interface FileRouteTypes {
     | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
+    | '/quests/$questId'
+    | '/quests/new'
     | '/auth/logout/callback'
   id:
     | '__root__'
@@ -103,6 +126,8 @@ export interface FileRouteTypes {
     | '/auth/account'
     | '/auth/callback'
     | '/auth/error'
+    | '/_authenticated/quests/$questId'
+    | '/_authenticated/quests/new'
     | '/auth/logout/callback'
   fileRoutesById: FileRoutesById
 }
@@ -166,15 +191,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLogoutCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/quests/new': {
+      id: '/_authenticated/quests/new'
+      path: '/quests/new'
+      fullPath: '/quests/new'
+      preLoaderRoute: typeof AuthenticatedQuestsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/quests/$questId': {
+      id: '/_authenticated/quests/$questId'
+      path: '/quests/$questId'
+      fullPath: '/quests/$questId'
+      preLoaderRoute: typeof AuthenticatedQuestsQuestIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedQuestsQuestIdRoute: typeof AuthenticatedQuestsQuestIdRoute
+  AuthenticatedQuestsNewRoute: typeof AuthenticatedQuestsNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedQuestsQuestIdRoute: AuthenticatedQuestsQuestIdRoute,
+  AuthenticatedQuestsNewRoute: AuthenticatedQuestsNewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

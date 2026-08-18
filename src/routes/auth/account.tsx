@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { AtSign } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
-import type { UserDto } from "@/lib/hooks.ts";
+import type { CreateUserDto, UserDto } from "@/lib/types.ts";
 import { useAccount } from "@/lib/hooks.ts";
 import {
   Field,
@@ -93,7 +93,7 @@ const AccountForm = () => {
       .max(50, "Display name must be at most 50 characters."),
     bio: z
       .string()
-      // .min(1, "Bio must be at least 1 characters.")
+      // .min(1, "Bio must be at least 1 character.")
       .max(100, "Bio must be at most 100 characters."),
   });
 
@@ -107,7 +107,7 @@ const AccountForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    createAccountMutation.mutate(data.username, {
+    createAccountMutation.mutate(data, {
       onSuccess: () => {
         void navigate({ to: "/dashboard", replace: true });
       },
@@ -219,12 +219,12 @@ export const useCreateAccount = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (username: string) => {
+    mutationFn: async (createUserDto: CreateUserDto) => {
       if (!token) {
         // TODO handle
         throw new Error("Unauthorized without token");
       }
-      return await createAccount(token, username);
+      return await createAccount(token, createUserDto);
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["account"] });
@@ -235,11 +235,11 @@ export const useCreateAccount = () => {
 
 const createAccount = async (
   accessToken: string,
-  username: string,
+  createUserDto: CreateUserDto,
 ): Promise<UserDto> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users`, {
     method: "POST",
-    body: JSON.stringify({ username: username }),
+    body: JSON.stringify(createUserDto),
     headers: {
       "Content-Type": "application/json",
       Authorization: accessToken ? `Bearer ${accessToken}` : "",

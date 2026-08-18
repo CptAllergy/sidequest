@@ -1,7 +1,8 @@
 import { useAuth } from "@zitadel/react-auth";
 import { useQuery } from "@tanstack/react-query";
+import type { UserDto } from "@/lib/types.ts";
 
-// TODO move to types
+// TODO move to types.ts
 export type Account = {
   /**
    * Whether the user has successfully completed the authentication flow. If false, the user should be redirected to the login page.
@@ -15,14 +16,6 @@ export type Account = {
    * The user object returned from the API.
    */
   user?: UserDto;
-};
-
-export type UserDto = {
-  id: string;
-  username: string;
-  display_name: string;
-  avatar_url: string;
-  bio: string;
 };
 
 export const useAccount = () => {

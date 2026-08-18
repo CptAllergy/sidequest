@@ -1,12 +1,12 @@
 import { Navigate, createFileRoute } from "@tanstack/react-router";
-import { useProfile } from "@/lib/hooks.ts";
+import { useAccount } from "@/lib/hooks.ts";
 
 export const Route = createFileRoute("/auth/callback")({
   component: Callback,
 });
 
 function Callback() {
-  const { profile, isPending, isAuthenticated } = useProfile();
+  const { account, isPending, isAuthenticated } = useAccount();
 
   console.log(
     "-------->",
@@ -20,18 +20,18 @@ function Callback() {
     return <Navigate to={"/"} replace={true} />;
   }
 
-  if (isPending || !profile) {
+  if (isPending || !account) {
     return <div>Loading</div>;
   }
 
-  if (!profile.isSuccess) {
+  if (!account.isSuccess) {
+    return <Navigate to={"/auth/error"} replace={true} />;
+  }
+
+  if (!account.isAccountComplete) {
     return <Navigate to={"/auth/account"} replace={true} />;
   }
 
-  if (!profile.isAccountComplete) {
-    return <Navigate to={"/auth/account"} replace={true} />;
-  }
-
-  // Complete account
+  // User has an account
   return <Navigate to={"/dashboard"} replace={true} />;
 }

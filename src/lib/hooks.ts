@@ -2,7 +2,7 @@ import { useAuth } from "@zitadel/react-auth";
 import { useQuery } from "@tanstack/react-query";
 
 // TODO move to types
-export type Profile = {
+export type Account = {
   /**
    * Whether the user has successfully completed the authentication flow. If false, the user should be redirected to the login page.
    */
@@ -25,14 +25,14 @@ export type UserDto = {
   bio: string;
 };
 
-export const useProfile = () => {
+export const useAccount = () => {
   const auth = useAuth();
   const token = auth.user?.access_token;
 
-  const { data: profile, isPending } = useQuery<Profile, Error>({
-    queryKey: ["profile", token],
+  const { data: account, isPending } = useQuery<Account, Error>({
+    queryKey: ["account", token],
     queryFn: async () => {
-      return await getProfile(token!);
+      return await getAccount(token!);
     },
     enabled: !!token,
     retry: false,
@@ -40,22 +40,19 @@ export const useProfile = () => {
   });
 
   return {
-    profile,
+    account: account,
     isPending: isPending || auth.isLoading,
     isAuthenticated: auth.isAuthenticated,
   };
 };
 
-const getProfile = async (accessToken: string): Promise<Profile> => {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/v1/users/profile`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      },
+const getAccount = async (accessToken: string): Promise<Account> => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/me`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
     },
-  );
+  });
 
   if (!res.ok && res.status !== 404) {
     return { isSuccess: false };

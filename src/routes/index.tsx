@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useAuth } from "@zitadel/react-auth";
 import logo from "../logo.svg";
-import { useProfile } from "@/lib/hooks.ts";
+import { useAccount } from "@/lib/hooks.ts";
 import SignOutButton from "@/components/sign-out-button.tsx";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
@@ -95,9 +95,9 @@ const Login = () => {
 };
 
 const Summary = () => {
-  const { profile, isPending } = useProfile();
+  const { account, isPending } = useAccount();
 
-  if (isPending || !profile) {
+  if (isPending || !account) {
     return <div>Loading</div>;
   }
 
@@ -106,8 +106,8 @@ const Summary = () => {
       <h2>Summary</h2>
       <div>
         <span>User</span>
-        {profile.user ? (
-          <span>{profile.user.username}</span>
+        {account.user ? (
+          <span>{account.user.username}</span>
         ) : (
           <span>Guest</span>
         )}

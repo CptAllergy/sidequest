@@ -13,6 +13,7 @@ import "./styles.css";
 import reportWebVitals from "./reportWebVitals.ts";
 import { ZITADEL_SCOPES } from "@/lib/scopes.ts";
 import { NotFound } from "@/components/not-found.tsx";
+import { ThemeProvider } from "@/context/theme-provider.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -61,7 +62,9 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider {...zitadelConfig}>
-          <RouterProvider router={router} />
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <RouterProvider router={router} />
+          </ThemeProvider>
         </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,

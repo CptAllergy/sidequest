@@ -17,6 +17,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 
+import { Link } from "@tanstack/react-router";
 import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -40,7 +41,7 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "Quest Board",
       url: "#",
       icon: IconDashboard,
     },
@@ -149,6 +150,17 @@ const data = {
   ],
 };
 
+const logo = `
+   ▄████████  ▄█  ████████▄     ▄████████ ████████▄   ███    █▄     ▄████████    ▄████████     ███     
+  ███    ███ ███  ███   ▀███   ███    ███ ███    ███  ███    ███   ███    ███   ███    ███ ▀█████████▄ 
+  ███    █▀  ███▌ ███    ███   ███    █▀  ███    ███  ███    ███   ███    █▀    ███    █▀     ▀███▀▀██ 
+  ███        ███▌ ███    ███  ▄███▄▄▄     ███    ███  ███    ███  ▄███▄▄▄       ███            ███   ▀ 
+▀███████████ ███▌ ███    ███ ▀▀███▀▀▀     ███    ███  ███    ███ ▀▀███▀▀▀     ▀███████████     ███     
+         ███ ███  ███    ███   ███    █▄  ███    ███  ███    ███   ███    █▄           ███     ███     
+   ▄█    ███ ███  ███   ▄███   ███    ███ ███  ▀ ███  ███    ███   ███    ███    ▄█    ███     ███     
+ ▄████████▀  █▀   ████████▀    ██████████  ▀██████▀▄█ ████████▀    ██████████  ▄████████▀     ▄████▀   
+`;
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -159,10 +171,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="#">
+              <Link to="/" className="flex items-center gap-4">
                 <IconInnerShadowTop className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+                <div className="font-mono text-[0.15rem] leading-none tracking-tighter whitespace-pre">
+                  {logo}
+                </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

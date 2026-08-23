@@ -25,12 +25,7 @@ import { cn } from "@/lib/utils.ts";
 import { Progress } from "@/components/ui/progress.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Field, FieldLabel } from "@/components/ui/field.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
@@ -308,12 +303,12 @@ const QuestBoardPreview = () => {
               <TabsTrigger value="movies">Movies</TabsTrigger>
               <TabsTrigger value="books">Books</TabsTrigger>
             </TabsList>
-            {/*<TabsContent value="account">*/}
+            {/* <TabsContent value="account">*/}
             {/*  Make changes to your account here.*/}
-            {/*</TabsContent>*/}
-            {/*<TabsContent value="password">*/}
+            {/* </TabsContent>*/}
+            {/* <TabsContent value="password">*/}
             {/*  Change your password here.*/}
-            {/*</TabsContent>*/}
+            {/* </TabsContent>*/}
           </Tabs>
         </h3>
 

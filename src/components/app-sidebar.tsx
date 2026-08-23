@@ -9,7 +9,6 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
@@ -172,7 +171,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link to="/" className="flex items-center gap-4">
-                <IconInnerShadowTop className="size-5!" />
                 <div className="font-mono text-[0.15rem] leading-none tracking-tighter whitespace-pre">
                   {logo}
                 </div>

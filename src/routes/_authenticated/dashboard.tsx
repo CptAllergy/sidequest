@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useAuth } from "@zitadel/react-auth";
-import SignOutButton from "@/components/sign-out-button.tsx";
+import LogoutButton from "@/components/logout-button.tsx";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
@@ -24,7 +24,7 @@ function Dashboard() {
   return (
     <div className="p-4 text-center">
       <h1>This is the dashboard.</h1>
-      <SignOutButton />
+      <LogoutButton />
       <div>
         <div>Your userID is:</div>
         <div className="rounded-lg border border-gray-200 bg-white p-8">

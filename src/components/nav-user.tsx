@@ -6,6 +6,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 
+import { useAuth } from "@zitadel/react-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -22,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAccount } from "@/lib/hooks.ts";
 
 export function NavUser({
   user,
@@ -33,6 +35,20 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const auth = useAuth();
+  const { account } = useAccount();
+
+  if (!account || !account.isAccountComplete) {
+    return null;
+  }
+
+  const handleLogout = async () => {
+    await auth.signoutRedirect({
+      post_logout_redirect_uri:
+        import.meta.env.VITE_ZITADEL_POST_LOGOUT_URL ||
+        window.location.origin + "/",
+    });
+  };
 
   return (
     <SidebarMenu>
@@ -44,13 +60,18 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage
+                  src={user.avatar}
+                  alt={account.user && account.user.username}
+                />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                  {account.user && account.user.display_name}
+                </span>
                 <span className="text-muted-foreground truncate text-xs">
-                  {user.email}
+                  {account.user && `@${account.user.username}`}
                 </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
@@ -92,7 +113,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

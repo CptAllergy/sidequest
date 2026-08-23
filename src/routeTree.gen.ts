@@ -9,39 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthErrorRouteImport } from './routes/auth/error'
-import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
-import { Route as AuthAccountRouteImport } from './routes/auth/account'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthLogoutCallbackRouteImport } from './routes/auth/logout/callback'
-import { Route as AuthenticatedQuestsNewRouteImport } from './routes/_authenticated/quests/new'
-import { Route as AuthenticatedQuestsQuestIdRouteImport } from './routes/_authenticated/quests/$questId'
+import { Route as AuthAccountRouteImport } from './routes/auth/account'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AuthErrorRouteImport } from './routes/auth/error'
 import { Route as AuthenticatedProfileUsernameRouteImport } from './routes/_authenticated/profile/$username'
+import { Route as AuthenticatedQuestsQuestIdRouteImport } from './routes/_authenticated/quests/$questId'
+import { Route as AuthenticatedQuestsNewRouteImport } from './routes/_authenticated/quests/new'
+import { Route as AuthLogoutCallbackRouteImport } from './routes/auth/logout/callback'
 
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthErrorRoute = AuthErrorRouteImport.update({
-  id: '/auth/error',
-  path: '/auth/error',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthCallbackRoute = AuthCallbackRouteImport.update({
-  id: '/auth/callback',
-  path: '/auth/callback',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthAccountRoute = AuthAccountRouteImport.update({
-  id: '/auth/account',
-  path: '/auth/account',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -49,28 +34,43 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthLogoutCallbackRoute = AuthLogoutCallbackRouteImport.update({
-  id: '/auth/logout/callback',
-  path: '/auth/logout/callback',
+const AuthAccountRoute = AuthAccountRouteImport.update({
+  id: '/auth/account',
+  path: '/auth/account',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedQuestsNewRoute = AuthenticatedQuestsNewRouteImport.update({
-  id: '/quests/new',
-  path: '/quests/new',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedQuestsQuestIdRoute =
-  AuthenticatedQuestsQuestIdRouteImport.update({
-    id: '/quests/$questId',
-    path: '/quests/$questId',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
+const AuthErrorRoute = AuthErrorRouteImport.update({
+  id: '/auth/error',
+  path: '/auth/error',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedProfileUsernameRoute =
   AuthenticatedProfileUsernameRouteImport.update({
     id: '/profile/$username',
     path: '/profile/$username',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedQuestsQuestIdRoute =
+  AuthenticatedQuestsQuestIdRouteImport.update({
+    id: '/quests/$questId',
+    path: '/quests/$questId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedQuestsNewRoute = AuthenticatedQuestsNewRouteImport.update({
+  id: '/quests/new',
+  path: '/quests/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthLogoutCallbackRoute = AuthLogoutCallbackRouteImport.update({
+  id: '/auth/logout/callback',
+  path: '/auth/logout/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -155,13 +155,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -169,25 +162,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/error': {
-      id: '/auth/error'
-      path: '/auth/error'
-      fullPath: '/auth/error'
-      preLoaderRoute: typeof AuthErrorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/callback': {
-      id: '/auth/callback'
-      path: '/auth/callback'
-      fullPath: '/auth/callback'
-      preLoaderRoute: typeof AuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/account': {
-      id: '/auth/account'
-      path: '/auth/account'
-      fullPath: '/auth/account'
-      preLoaderRoute: typeof AuthAccountRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -197,18 +176,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/auth/logout/callback': {
-      id: '/auth/logout/callback'
-      path: '/auth/logout/callback'
-      fullPath: '/auth/logout/callback'
-      preLoaderRoute: typeof AuthLogoutCallbackRouteImport
+    '/auth/account': {
+      id: '/auth/account'
+      path: '/auth/account'
+      fullPath: '/auth/account'
+      preLoaderRoute: typeof AuthAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/quests/new': {
-      id: '/_authenticated/quests/new'
-      path: '/quests/new'
-      fullPath: '/quests/new'
-      preLoaderRoute: typeof AuthenticatedQuestsNewRouteImport
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/error': {
+      id: '/auth/error'
+      path: '/auth/error'
+      fullPath: '/auth/error'
+      preLoaderRoute: typeof AuthErrorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/profile/$username': {
+      id: '/_authenticated/profile/$username'
+      path: '/profile/$username'
+      fullPath: '/profile/$username'
+      preLoaderRoute: typeof AuthenticatedProfileUsernameRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/quests/$questId': {
@@ -218,12 +211,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuestsQuestIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/profile/$username': {
-      id: '/_authenticated/profile/$username'
-      path: '/profile/$username'
-      fullPath: '/profile/$username'
-      preLoaderRoute: typeof AuthenticatedProfileUsernameRouteImport
+    '/_authenticated/quests/new': {
+      id: '/_authenticated/quests/new'
+      path: '/quests/new'
+      fullPath: '/quests/new'
+      preLoaderRoute: typeof AuthenticatedQuestsNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/auth/logout/callback': {
+      id: '/auth/logout/callback'
+      path: '/auth/logout/callback'
+      fullPath: '/auth/logout/callback'
+      preLoaderRoute: typeof AuthLogoutCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }

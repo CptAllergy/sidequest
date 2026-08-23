@@ -10,10 +10,8 @@ import {
   TrendingUpIcon,
   TvIcon,
 } from "lucide-react";
-import { useAuth } from "@zitadel/react-auth";
 import type { QuestDto } from "@/lib/types.ts";
 import { useAccount } from "@/lib/hooks.ts";
-import SignOutButton from "@/components/sign-out-button.tsx";
 import {
   Card,
   CardContent,
@@ -22,10 +20,8 @@ import {
 } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { cn } from "@/lib/utils.ts";
-import { Progress } from "@/components/ui/progress.tsx";
-import { Button } from "@/components/ui/button.tsx";
-import { Field, FieldLabel } from "@/components/ui/field.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
+import { ActiveQuest } from "@/components/home/active-quest.tsx";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
@@ -39,25 +35,13 @@ function App() {
       <div className="flex flex-col items-center justify-center">
         <StatsSection />
         <ActiveQuestSection />
-        <QuestBoardPreview />
+        <QuestBoardPreviewSection />
         <ArchivedQuestsSection />
-        <Login />
-        <SignOutButton />
         <div className="h-52"></div>
       </div>
     </div>
   );
 }
-
-const Login = () => {
-  const auth = useAuth();
-
-  const login = async () => {
-    await auth.signinRedirect();
-  };
-
-  return <button onClick={login}>Login</button>;
-};
 
 const StatsSection = () => {
   const { account, isPending } = useAccount();
@@ -68,7 +52,7 @@ const StatsSection = () => {
 
   return (
     <section className="py-8 sm:py-16 lg:py-24">
-      <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-2 sm:px-6 lg:px-8 xl:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-2 sm:px-6 md:grid-cols-4 lg:px-8">
         <StatCard {...statisticsData[0]} />
         <StatCard {...statisticsData[1]} />
         <StatCard {...statisticsData[2]} />
@@ -83,28 +67,28 @@ const statisticsData: StatisticsCardProps[] = [
     title: "Games Finished",
     value: "34",
     status: "within",
-    range: "$30k - $50k",
+    range: "Down",
     icon: <Gamepad2Icon />,
   },
   {
     title: "Books Read",
     value: "12",
     status: "exceed",
-    range: "Target: $18k",
+    range: "Up",
     icon: <BookCheckIcon />,
   },
   {
     title: "Movies Watched",
     value: "67",
     status: "observe",
-    range: "$80k - $120k",
+    range: "Down",
     icon: <ClapperboardIcon />,
   },
   {
     title: "Shows Completed",
     value: "28",
     status: "unknown",
-    range: "Q4 Review Pending",
+    range: "Up",
     icon: <TvIcon />,
   },
 ];
@@ -192,55 +176,7 @@ const ActiveQuestSection = () => {
   );
 };
 
-const ActiveQuest = () => {
-  return (
-    <Card className="relative overflow-hidden p-0">
-      {/* Image background*/}
-      <img
-        src="/elden_ring.png"
-        alt="Active Quest"
-        className="aspect-16/9 w-full object-cover"
-      />
-
-      {/* Dark overlay*/}
-      <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-black/10" />
-
-      <CardContent className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-around xl:h-2/3">
-        <div className="flex flex-col gap-1">
-          <Badge className=" ">Legendary Quest</Badge>
-        </div>
-        <div className="flex w-1/2 flex-col items-start gap-4 text-left text-wrap">
-          <p className="text-4xl font-semibold">
-            Elden Ring: Shadow of the Erdtree
-          </p>
-          <p className="text-muted-foreground">
-            Navigating the Land of Shadow to find Miquella the Kind. Currently
-            facing the challenges of the Shadow Keep.
-          </p>
-        </div>
-        <div className="flex w-2/3 flex-col gap-5">
-          <div className="flex flex-col items-start gap-3">
-            <Field className="w-full max-w-sm">
-              <FieldLabel htmlFor="progress-upload">
-                <span>Progress</span>
-                <span className="ml-auto">66%</span>
-              </FieldLabel>
-              <Progress value={45} id="progress-upload" />
-            </Field>
-          </div>
-          <div className="flex gap-4">
-            <Button size="lg">Continue Quest</Button>
-            <Button variant="secondary" size="lg">
-              Abandon Quest
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const QuestBoardPreview = () => {
+const QuestBoardPreviewSection = () => {
   const quests: QuestDto[] = [
     {
       id: "1",
@@ -292,10 +228,10 @@ const QuestBoardPreview = () => {
     <section className="my-10">
       <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <h3 className="flex items-center justify-between gap-2 text-2xl">
-          <h4 className="flex items-center gap-2 text-2xl">
+          <span className="flex items-center gap-2 text-2xl">
             <StarIcon />
             <span>Quest Board</span>
-          </h4>
+          </span>
           <Tabs defaultValue="all" className="">
             <TabsList variant="default">
               <TabsTrigger value="all">All</TabsTrigger>

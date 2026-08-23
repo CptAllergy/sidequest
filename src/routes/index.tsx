@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  ArrowRight,
   BookCheckIcon,
   ClapperboardIcon,
   Gamepad2Icon,
@@ -26,6 +25,12 @@ import { cn } from "@/lib/utils.ts";
 import { Progress } from "@/components/ui/progress.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Field, FieldLabel } from "@/components/ui/field.tsx";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs.tsx";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
@@ -205,7 +210,7 @@ const ActiveQuest = () => {
       {/* Dark overlay*/}
       <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-black/10" />
 
-      <CardContent className="absolute inset-x-0 bottom-0 z-10 flex h-3/5 flex-col justify-around">
+      <CardContent className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-around xl:h-2/3">
         <div className="flex flex-col gap-1">
           <Badge className=" ">Legendary Quest</Badge>
         </div>
@@ -241,22 +246,114 @@ const ActiveQuest = () => {
 };
 
 const QuestBoardPreview = () => {
+  const quests: QuestDto[] = [
+    {
+      id: "1",
+      title: "Quest 1",
+      description: "Description for Quest 1",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/elden_ring.png",
+    },
+    {
+      id: "2",
+      title: "Quest 2",
+      description: "Description for Quest 2",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/elden_ring.png",
+    },
+    {
+      id: "3",
+      title: "Quest 3",
+      description: "Description for Quest 3",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/player_piano.png",
+    },
+    {
+      id: "4",
+      title: "Quest 4",
+      description: "Description for Quest 4",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/player_piano.png",
+    },
+  ];
+
   return (
-    <section className="">
+    <section className="my-10">
       <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
-        <h3 className="flex items-center gap-2 text-2xl">
-          <StarIcon />
-          <span>Quest Board</span>
+        <h3 className="flex items-center justify-between gap-2 text-2xl">
+          <h4 className="flex items-center gap-2 text-2xl">
+            <StarIcon />
+            <span>Quest Board</span>
+          </h4>
+          <Tabs defaultValue="all" className="">
+            <TabsList variant="default">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="games">Games</TabsTrigger>
+              <TabsTrigger value="movies">Movies</TabsTrigger>
+              <TabsTrigger value="books">Books</TabsTrigger>
+            </TabsList>
+            {/*<TabsContent value="account">*/}
+            {/*  Make changes to your account here.*/}
+            {/*</TabsContent>*/}
+            {/*<TabsContent value="password">*/}
+            {/*  Change your password here.*/}
+            {/*</TabsContent>*/}
+          </Tabs>
         </h3>
-        <ul>
-          <li className="">All</li>
-          <li className="">Games</li>
-          <li className="">Movies</li>
-          <li className="">Books</li>
-        </ul>
-        {/* <ActiveQuest />*/}
+
+        <div className="grid grid-cols-4 gap-4">
+          {quests.map((quest) => (
+            <QuestCard key={quest.id} quest={quest} />
+          ))}
+        </div>
       </div>
     </section>
+  );
+};
+
+const QuestCard = ({ quest }: { quest: QuestDto }) => {
+  return (
+    <Card className="gap-2 overflow-hidden pt-0">
+      <div className="relative">
+        <img
+          src={quest.image_url}
+          alt="Archived Quest"
+          className="aspect-2/3 w-full object-cover object-center"
+        />
+        <div className="absolute top-0 right-0 z-10 p-3">
+          <Badge className=" " variant="secondary">
+            4 Oct 2025
+          </Badge>
+        </div>
+      </div>
+
+      <CardContent>
+        <p className="truncate">{quest.title}</p>
+        <div className="mt-2 flex items-center gap-0.5">
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -328,23 +425,28 @@ const ArchivedQuestsSection = () => {
 
 const ArchivedQuestCard = ({ quest }: { quest: QuestDto }) => {
   return (
-    <Card className="">
-      <CardContent>
+    <Card className="gap-2 overflow-hidden pt-0">
+      <div className="relative">
         <img
           src={quest.image_url}
           alt="Archived Quest"
-          className="aspect-2/3 w-full object-cover"
+          className="aspect-2/3 w-full object-cover object-center"
         />
-        <div>
-          <h4 className="">{quest.title}</h4>
-          <span className="text-sm">Completed: {quest.updated_at}</span>
-          <div className="mt-2 flex items-center gap-0.5">
-            <StarIcon size={15} fill="currentColor" />
-            <StarIcon size={15} fill="currentColor" />
-            <StarIcon size={15} fill="currentColor" />
-            <StarIcon size={15} fill="currentColor" />
-            <StarIcon size={15} />
-          </div>
+        <div className="absolute top-0 right-0 z-10 p-3">
+          <Badge className=" " variant="secondary">
+            4 Oct 2025
+          </Badge>
+        </div>
+      </div>
+
+      <CardContent>
+        <p className="truncate">{quest.title}</p>
+        <div className="mt-2 flex items-center gap-0.5">
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} fill="currentColor" />
+          <StarIcon size={15} />
         </div>
       </CardContent>
     </Card>

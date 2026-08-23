@@ -40,7 +40,7 @@ function App() {
         <StatsSection />
         <ActiveQuestSection />
         <QuestBoardPreview />
-        <ArchivedQuestsSections />
+        <ArchivedQuestsSection />
         <Login />
         <SignOutButton />
         <div className="h-52"></div>
@@ -205,7 +205,7 @@ const ActiveQuest = () => {
       {/* Dark overlay*/}
       <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/30 to-black/10" />
 
-      <CardContent className="absolute inset-0 z-10 flex flex-col justify-around">
+      <CardContent className="absolute inset-x-0 bottom-0 z-10 flex h-3/5 flex-col justify-around">
         <div className="flex flex-col gap-1">
           <Badge className=" ">Legendary Quest</Badge>
         </div>
@@ -248,13 +248,67 @@ const QuestBoardPreview = () => {
           <StarIcon />
           <span>Quest Board</span>
         </h3>
+        <ul>
+          <li className="">All</li>
+          <li className="">Games</li>
+          <li className="">Movies</li>
+          <li className="">Books</li>
+        </ul>
         {/* <ActiveQuest />*/}
       </div>
     </section>
   );
 };
 
-const ArchivedQuestsSections = () => {
+// TODO I do like the idea of having an archived quests section to check things that have been completed already
+const ArchivedQuestsSection = () => {
+  const quests: QuestDto[] = [
+    {
+      id: "1",
+      title: "Quest 1",
+      description: "Description for Quest 1",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/elden_ring.png",
+    },
+    {
+      id: "2",
+      title: "Quest 2",
+      description: "Description for Quest 2",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/elden_ring.png",
+    },
+    {
+      id: "3",
+      title: "Quest 3",
+      description: "Description for Quest 3",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/player_piano.png",
+    },
+    {
+      id: "4",
+      title: "Quest 4",
+      description: "Description for Quest 4",
+      status: "completed",
+      type: "main",
+      user_id: "user123",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      image_url: "/player_piano.png",
+    },
+  ];
+
   return (
     <section className="">
       <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
@@ -262,28 +316,37 @@ const ArchivedQuestsSections = () => {
           <StarIcon />
           <span>Archived Quests</span>
         </h3>
-        {/* <ActiveQuest />*/}
+        <div className="grid grid-cols-4 gap-4">
+          {quests.map((quest) => (
+            <ArchivedQuestCard key={quest.id} quest={quest} />
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-const QuestCard = ({ quest }: { quest: QuestDto }) => {
+const ArchivedQuestCard = ({ quest }: { quest: QuestDto }) => {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg bg-slate-700 p-2">
-      {/* <img*/}
-      {/*  src={logo}*/}
-      {/*  className="pointer-events-none h-32 bg-white"*/}
-      {/*  alt="logo"*/}
-      {/* />*/}
-      <div className="flex flex-col items-start">
-        <h4 className="text-lg text-white">{quest.title}</h4>
-        <span className="text-orange-200">{quest.description}</span>
-        <div className="mt-5 flex w-full justify-between text-orange-200">
-          <span>Last entry</span>
-          <ArrowRight />
+    <Card className="">
+      <CardContent>
+        <img
+          src={quest.image_url}
+          alt="Archived Quest"
+          className="aspect-2/3 w-full object-cover"
+        />
+        <div>
+          <h4 className="">{quest.title}</h4>
+          <span className="text-sm">Completed: {quest.updated_at}</span>
+          <div className="mt-2 flex items-center gap-0.5">
+            <StarIcon size={15} fill="currentColor" />
+            <StarIcon size={15} fill="currentColor" />
+            <StarIcon size={15} fill="currentColor" />
+            <StarIcon size={15} fill="currentColor" />
+            <StarIcon size={15} />
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

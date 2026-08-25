@@ -1,12 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@zitadel/react-auth";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AtSign } from "lucide-react";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
 import type { SubmitHandler } from "react-hook-form";
-import type { CreateQuestDto, QuestDto } from "@/lib/types.ts";
 import {
   Card,
   CardContent,
@@ -22,34 +18,23 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field.tsx";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { useCreateQuest } from "@/hooks/use-create-quest.ts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
 
 export const Route = createFileRoute("/_authenticated/quests/new")({
   component: NewQuest,
 });
 
 function NewQuest() {
-  const auth = useAuth();
-
-  if (auth.isLoading) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gray-50">
-        <main className="flex-1 px-6 py-12">
-          <div className="flex min-h-screen items-center justify-center">
-            <p>Loading your session…</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-10 flex justify-center">
       <Card className="w-full sm:max-w-md">
@@ -72,7 +57,7 @@ const NewQuestHeader = () => {
 
 const NewQuestForm = () => {
   const createQuestMutation = useCreateQuest();
-  // TODO navigate to quest after creationconst navigate = useNavigate({ from: "/auth/account" });
+  const navigate = useNavigate({ from: "/quests/new" });
 
   // TODO check on these constraints
   const formSchema = z.object({
@@ -82,7 +67,7 @@ const NewQuestForm = () => {
       .max(32, "Title must be at most 32 characters."),
     description: z
       .string()
-      .max(100, "Display name must be at most 50 characters."),
+      .max(100, "Description name must be at most 100 characters."),
     type: z
       .string()
       // .min(1, "Bio must be at least 1 character.")
@@ -106,17 +91,35 @@ const NewQuestForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    console.log(data);
     createQuestMutation.mutate(data, {
-      onSuccess: () => {
-        // TODO navigate to quest page
-        //  void navigate({ to: "/dashboard", replace: true });
+      onSuccess: (newQuest) => {
+        // TODO add some success toast
+        void navigate({
+          to: "/quests/$questId",
+          params: { questId: newQuest.id },
+        });
       },
       onError: () => {
         // TODO show some error
+        console.error("Failed to create quest");
       },
     });
   };
+
+  const questTypes = [
+    { label: "Book", value: "BOOK" },
+    { label: "Game", value: "GAME" },
+    { label: "Movie", value: "MOVIE" },
+    { label: "Show", value: "SHOW" },
+    { label: "Project", value: "PROJECT" },
+  ] as const;
+
+  const statusTypes = [
+    { label: "Planned", value: "PLANNED" },
+    { label: "Started", value: "STARTED" },
+    { label: "Completed", value: "COMPLETED" },
+    { label: "Canceled", value: "CANCELED" },
+  ] as const;
 
   // TODO fix IDs
   return (
@@ -133,19 +136,13 @@ const NewQuestForm = () => {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="form-new-quest-username">Title</FieldLabel>
-                <InputGroup>
-                  <InputGroupInput
-                    {...field}
-                    id="form-new-quest-username"
-                    placeholder="e.g. explorer20"
-                    aria-invalid={fieldState.invalid}
-                    className="lowercase"
-                    required
-                  />
-                  <InputGroupAddon>
-                    <AtSign />
-                  </InputGroupAddon>
-                </InputGroup>
+                <Input
+                  {...field}
+                  id="form-new-quest-username"
+                  placeholder="e.g. The Witcher 3"
+                  aria-invalid={fieldState.invalid}
+                  required
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -160,13 +157,26 @@ const NewQuestForm = () => {
                 <FieldLabel htmlFor="form-new-quest-display-name">
                   Type
                 </FieldLabel>
-                <Input
-                  {...field}
-                  id="form-new-quest-display-name"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="How others see your name"
-                  autoComplete="off"
-                />
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger
+                    id="form-rhf-select-language"
+                    aria-invalid={fieldState.invalid}
+                    className="min-w-[120px]"
+                  >
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    {questTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -181,13 +191,26 @@ const NewQuestForm = () => {
                 <FieldLabel htmlFor="form-new-quest-display-name">
                   Status
                 </FieldLabel>
-                <Input
-                  {...field}
-                  id="form-new-quest-display-name"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="How others see your name"
-                  autoComplete="off"
-                />
+                <Select
+                  name={field.name}
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger
+                    id="form-rhf-select-language"
+                    aria-invalid={fieldState.invalid}
+                    className="min-w-[120px]"
+                  >
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="item-aligned">
+                    {statusTypes.map((status) => (
+                      <SelectItem key={status.value} value={status.value}>
+                        {status.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -226,55 +249,15 @@ const NewQuestFooter = () => {
   return (
     <CardFooter>
       <Field orientation="horizontal" className="justify-end">
-        <Button type="button" variant="outline">
-          Discard
-        </Button>
+        <Link to="/">
+          <Button type="button" variant="outline">
+            Discard
+          </Button>
+        </Link>
         <Button type="submit" form="form-new-quest">
           Commit
         </Button>
       </Field>
     </CardFooter>
   );
-};
-
-// TODO review this code and replace with quest
-export const useCreateQuest = () => {
-  const auth = useAuth();
-  const token = auth.user?.access_token;
-
-  // const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (createQuestDto: CreateQuestDto) => {
-      if (!token) {
-        // TODO handle
-        throw new Error("Unauthorized without token");
-      }
-      return await createQuest(token, createQuestDto);
-    },
-    onSuccess: () => {
-      // void queryClient.invalidateQueries({ queryKey: [""] });
-    },
-  });
-  return mutation;
-};
-
-const createQuest = async (
-  accessToken: string,
-  createQuestDto: CreateQuestDto,
-): Promise<QuestDto> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`, {
-    method: "POST",
-    body: JSON.stringify(createQuestDto),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to create quest: ${res.status}`);
-  }
-
-  return (await res.json()) as QuestDto;
 };

@@ -2,6 +2,7 @@ import { useAuth } from "@zitadel/react-auth";
 import { SidebarTrigger } from "@/components/ui/sidebar.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { ModeToggle } from "@/components/mode-toggle.tsx";
 
 export default function AppHeader() {
   return (
@@ -14,6 +15,7 @@ export default function AppHeader() {
         />
         <h1 className="text-base font-medium">Home</h1>
         <div className="ml-auto flex items-center gap-2">
+          <ModeToggle />
           <LoginButton />
         </div>
       </div>

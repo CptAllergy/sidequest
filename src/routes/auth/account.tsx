@@ -1,13 +1,10 @@
 import { Navigate, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAuth, withAuthenticationRequired } from "@zitadel/react-auth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { withAuthenticationRequired } from "@zitadel/react-auth";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { AtSign } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
-import type { CreateUserDto, UserDto } from "@/lib/types.ts";
-import { useAccount } from "@/lib/hooks.ts";
 import {
   Field,
   FieldError,
@@ -31,6 +28,8 @@ import {
 } from "@/components/ui/input-group.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { useCreateAccount } from "@/hooks/use-create-account.ts";
+import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/auth/account")({
   component: withAuthenticationRequired(Account),
@@ -209,46 +208,4 @@ const AccountFooter = () => {
       </Field>
     </CardFooter>
   );
-};
-
-// TODO review this code
-export const useCreateAccount = () => {
-  const auth = useAuth();
-  const token = auth.user?.access_token;
-
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (createUserDto: CreateUserDto) => {
-      if (!token) {
-        // TODO handle
-        throw new Error("Unauthorized without token");
-      }
-      return await createAccount(token, createUserDto);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["account"] });
-    },
-  });
-  return mutation;
-};
-
-const createAccount = async (
-  accessToken: string,
-  createUserDto: CreateUserDto,
-): Promise<UserDto> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users`, {
-    method: "POST",
-    body: JSON.stringify(createUserDto),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to create profile: ${res.status}`);
-  }
-
-  return (await res.json()) as UserDto;
 };

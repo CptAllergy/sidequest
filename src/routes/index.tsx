@@ -10,8 +10,7 @@ import {
   TrendingUpIcon,
   TvIcon,
 } from "lucide-react";
-import type { QuestDto } from "@/lib/types.ts";
-import { useAccount } from "@/lib/hooks.ts";
+import type { QuestDto } from "@/lib/types/dto.ts";
 import {
   Card,
   CardContent,
@@ -22,6 +21,8 @@ import { Badge } from "@/components/ui/badge.tsx";
 import { cn } from "@/lib/utils.ts";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import { ActiveQuest } from "@/components/home/active-quest.tsx";
+import { QuestCard } from "@/components/quests/quest-card.tsx";
+import { useAccount } from "@/hooks/use-account.ts";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
@@ -31,14 +32,12 @@ export const Route = createFileRoute("/")({
 
 function App() {
   return (
-    <div className="text-center">
-      <div className="flex flex-col items-center justify-center">
-        <StatsSection />
-        <ActiveQuestSection />
-        <QuestBoardPreviewSection />
-        <ArchivedQuestsSection />
-        <div className="h-52"></div>
-      </div>
+    <div className="flex flex-col items-center justify-center">
+      <StatsSection />
+      <ActiveQuestSection />
+      <QuestBoardPreviewSection />
+      <ArchivedQuestsSection />
+      <div className="h-52"></div>
     </div>
   );
 }
@@ -51,8 +50,8 @@ const StatsSection = () => {
   }
 
   return (
-    <section className="py-8 sm:py-16 lg:py-24">
-      <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-2 sm:px-6 md:grid-cols-4 lg:px-8">
+    <section className="@container w-full max-w-5xl py-8 sm:py-16 lg:py-18">
+      <div className="mx-auto grid gap-4 px-4 @sm:grid-cols-2 @sm:px-6 @3xl:grid-cols-4 @3xl:px-8">
         <StatCard {...statisticsData[0]} />
         <StatCard {...statisticsData[1]} />
         <StatCard {...statisticsData[2]} />
@@ -131,12 +130,11 @@ const StatCard = ({
   value,
   title,
   status,
-  className,
   range,
   icon,
 }: StatisticsCardProps) => {
   return (
-    <Card className={cn("flex flex-col gap-3", className)}>
+    <Card className="flex w-full flex-col gap-3">
       <CardHeader className="flex items-center justify-between">
         <CardTitle className="text-sm font-semibold">{title}</CardTitle>
         {icon && (
@@ -145,7 +143,7 @@ const StatCard = ({
           </div>
         )}
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex items-center justify-start gap-4">
         <p className="text-3xl font-semibold tracking-tight">{value}</p>
         <Badge
           className={cn(
@@ -164,8 +162,8 @@ const StatCard = ({
 
 const ActiveQuestSection = () => {
   return (
-    <section className="">
-      <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
+    <section className="max-w-5xl">
+      <div className="mx-auto space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <h3 className="flex items-center gap-2 text-2xl">
           <StarIcon />
           <span>Current Quest</span>
@@ -225,8 +223,8 @@ const QuestBoardPreviewSection = () => {
   ];
 
   return (
-    <section className="my-10">
-      <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
+    <section className="my-10 max-w-5xl">
+      <div className="mx-auto space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <h3 className="flex items-center justify-between gap-2 text-2xl">
           <span className="flex items-center gap-2 text-2xl">
             <StarIcon />
@@ -255,36 +253,6 @@ const QuestBoardPreviewSection = () => {
         </div>
       </div>
     </section>
-  );
-};
-
-const QuestCard = ({ quest }: { quest: QuestDto }) => {
-  return (
-    <Card className="gap-2 overflow-hidden pt-0">
-      <div className="relative">
-        <img
-          src={quest.image_url}
-          alt="Archived Quest"
-          className="aspect-2/3 w-full object-cover object-center"
-        />
-        <div className="absolute top-0 right-0 z-10 p-3">
-          <Badge className=" " variant="secondary">
-            4 Oct 2025
-          </Badge>
-        </div>
-      </div>
-
-      <CardContent>
-        <p className="truncate">{quest.title}</p>
-        <div className="mt-2 flex items-center gap-0.5">
-          <StarIcon size={15} fill="currentColor" />
-          <StarIcon size={15} fill="currentColor" />
-          <StarIcon size={15} fill="currentColor" />
-          <StarIcon size={15} fill="currentColor" />
-          <StarIcon size={15} />
-        </div>
-      </CardContent>
-    </Card>
   );
 };
 
@@ -338,8 +306,8 @@ const ArchivedQuestsSection = () => {
   ];
 
   return (
-    <section className="">
-      <div className="mx-auto max-w-7xl space-y-4 px-4 text-left sm:px-6 lg:px-8">
+    <section className="max-w-5xl">
+      <div className="mx-auto space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <h3 className="flex items-center gap-2 text-2xl">
           <StarIcon />
           <span>Archived Quests</span>

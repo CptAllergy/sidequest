@@ -1,23 +1,25 @@
 import * as React from "react";
 import {
   IconCamera,
-  IconChartBar,
-  IconDashboard,
   IconDatabase,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react";
 
 import { Link } from "@tanstack/react-router";
-import { NavDocuments } from "@/components/nav-documents";
+import {
+  BookIcon,
+  ClapperboardIcon,
+  GamepadDirectionalIcon,
+  HouseIcon,
+  ScrollIcon,
+  TvIcon,
+} from "lucide-react";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
@@ -30,7 +32,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ModeToggle } from "@/components/mode-toggle.tsx";
 
 const data = {
   user: {
@@ -40,29 +41,34 @@ const data = {
   },
   navMain: [
     {
+      title: "Home",
+      url: "/",
+      icon: HouseIcon,
+    },
+    {
       title: "Quest Board",
-      url: "#",
-      icon: IconDashboard,
+      url: "/quests",
+      icon: ScrollIcon,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Games",
+      url: "/quests?type=GAME",
+      icon: GamepadDirectionalIcon,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
+      title: "Movies",
+      url: "/quests?type=MOVIE",
+      icon: ClapperboardIcon,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
+      title: "TV Shows",
+      url: "/quests?type=TV",
+      icon: TvIcon,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Books",
+      url: "/quests?type=BOOK",
+      icon: BookIcon,
     },
   ],
   navClouds: [
@@ -181,9 +187,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        {/* TODO include this section maybe with stats or other details*/}
+        {/* <NavDocuments items={data.documents} />*/}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
-        <ModeToggle />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

@@ -1,5 +1,6 @@
 import { Navigate, createFileRoute } from "@tanstack/react-router";
-import { useAccount } from "@/lib/hooks.ts";
+
+import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/auth/callback")({
   component: Callback,
@@ -7,14 +8,6 @@ export const Route = createFileRoute("/auth/callback")({
 
 function Callback() {
   const { account, isPending, isAuthenticated } = useAccount();
-
-  console.log(
-    "-------->",
-    "isPending:",
-    isPending,
-    "isAuthenticated:",
-    isAuthenticated,
-  );
 
   if (!isAuthenticated) {
     return <Navigate to={"/"} replace={true} />;
@@ -33,5 +26,5 @@ function Callback() {
   }
 
   // User has an account
-  return <Navigate to={"/dashboard"} replace={true} />;
+  return <Navigate to={"/quests"} replace={true} />;
 }

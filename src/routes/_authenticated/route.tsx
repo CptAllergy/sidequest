@@ -1,6 +1,7 @@
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 import { withAuthenticationRequired } from "@zitadel/react-auth";
-import { useAccount } from "@/lib/hooks.ts";
+
+import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/_authenticated")({
   component: withAuthenticationRequired(ProtectedRoute),

@@ -23,10 +23,26 @@ export type CreateUserDto = {
 };
 
 export type CreateQuestDto = {
-  // userId: string;
   title: string;
   description?: string;
   type: string;
   status: string;
   // imageUrl: string;
+};
+
+// TODO think about during entry refactor
+export type CreateQuestEntryDto = {
+  title: string;
+  description: string;
+};
+
+// TODO remember to consider this in the refactor as well
+export type QuestEntryDto = {
+  id: string;
+  quest_id: string;
+  user_id: string;
+  type: string;
+  content: any;
+  created_at: string;
+  updated_at: string;
 };

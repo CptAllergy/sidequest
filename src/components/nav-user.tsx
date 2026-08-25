@@ -23,7 +23,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAccount } from "@/lib/hooks.ts";
+
+import { useAccount } from "@/hooks/use-account.ts";
 
 export function NavUser({
   user,

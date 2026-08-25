@@ -1,7 +1,8 @@
-import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
+import { IconCirclePlusFilled } from "@tabler/icons-react";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import type { Icon } from "@tabler/icons-react";
 
-import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -16,9 +17,15 @@ export function NavMain({
   items: {
     title: string;
     url: string;
-    icon?: Icon;
+    icon?: LucideIcon | Icon;
   }[];
 }) {
+  const matchRoute = useMatchRoute();
+
+  const isRouteActive = (targetUrl: string) => {
+    return Boolean(matchRoute({ to: targetUrl }));
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -27,26 +34,30 @@ export function NavMain({
             <SidebarMenuButton
               tooltip="Quick Create"
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+              asChild
             >
-              <IconCirclePlusFilled />
-              <span>Quick Create</span>
+              <Link to={"/quests/new"}>
+                <IconCirclePlusFilled />
+                <span>New Quest</span>
+              </Link>
             </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <IconMail />
-              <span className="sr-only">Inbox</span>
-            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
+              <SidebarMenuButton
+                tooltip={item.title}
+                isActive={isRouteActive(item.url)}
+                asChild
+              >
+                <Link to={item.url} className="">
+                  {isRouteActive(item.url) && (
+                    <div className="bg-foreground h-full w-1 rounded-2xl"></div>
+                  )}
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

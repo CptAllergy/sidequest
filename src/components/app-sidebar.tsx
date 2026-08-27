@@ -176,7 +176,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <Link to="/" className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-2">
+                <img
+                  src="/sidequest-logo.svg"
+                  alt="Sidequest Logo"
+                  className="h-8 w-8"
+                />
                 <div className="font-mono text-[0.15rem] leading-none tracking-tighter whitespace-pre">
                   {logo}
                 </div>

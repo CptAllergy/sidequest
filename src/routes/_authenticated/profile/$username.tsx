@@ -4,11 +4,10 @@ import { useGetProfile } from "@/hooks/use-get-profile.ts";
 
 // TODO consider using loaders for this
 export const Route = createFileRoute("/_authenticated/profile/$username")({
-  component: ProfileRoute,
+  component: RouteComponent,
 });
 
-// TODO check convention for naming the main component in routes
-function ProfileRoute() {
+function RouteComponent() {
   const auth = useAuth();
   const { username } = Route.useParams();
   const { user } = useGetProfile(username);

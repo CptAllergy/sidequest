@@ -27,11 +27,13 @@ import { useGetQuestEntries } from "@/hooks/use-get-quest-entries.ts";
 
 // TODO consider using loaders for this
 export const Route = createFileRoute("/_authenticated/quests/$questId")({
-  component: QuestRoute,
+  component: RouteComponent,
 });
 
 // TODO check convention for naming the main component in routes
-function QuestRoute() {
+// TODO Quest details page should have a different view that depends on status (completed quests should display chronologically and and open quests should show the freshest entries first)
+
+function RouteComponent() {
   const { questId } = Route.useParams();
   const { quest } = useGetQuest(questId);
 
@@ -321,7 +323,7 @@ const QuestEntryText = ({ entry }: { entry: QuestEntryDto }) => {
   return (
     <>
       <p className="text-2xl">{entry.content.title}</p>
-      <p className="text-muted-foreground">{entry.content.text}</p>
+      <p className="text-muted-foreground">{entry.content.description}</p>
     </>
   );
 };

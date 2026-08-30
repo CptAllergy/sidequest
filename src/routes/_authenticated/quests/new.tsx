@@ -31,10 +31,10 @@ import {
 } from "@/components/ui/select.tsx";
 
 export const Route = createFileRoute("/_authenticated/quests/new")({
-  component: NewQuest,
+  component: RouteComponent,
 });
 
-function NewQuest() {
+function RouteComponent() {
   return (
     <div className="mt-10 flex justify-center">
       <Card className="w-full sm:max-w-md">

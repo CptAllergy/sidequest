@@ -4,13 +4,13 @@ import { withAuthenticationRequired } from "@zitadel/react-auth";
 import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/_authenticated")({
-  component: withAuthenticationRequired(ProtectedRoute),
+  component: withAuthenticationRequired(RouteComponent),
 });
 
 /**
- * All routes under _app are protected and require authentication
+ * All routes under _authenticated are protected and require a full account
  */
-function ProtectedRoute() {
+function RouteComponent() {
   const { account, isPending } = useAccount();
 
   // TODO do some loading animation

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/logout/callback")({
-  component: Callback,
+  component: RouteComponent,
 });
 
-function Callback() {
+function RouteComponent() {
   const navigate = useNavigate({ from: "/auth/logout/callback" });
   const [seconds, setSeconds] = useState(10);
 

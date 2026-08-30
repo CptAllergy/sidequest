@@ -3,10 +3,10 @@ import { Navigate, createFileRoute } from "@tanstack/react-router";
 import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/auth/callback")({
-  component: Callback,
+  component: RouteComponent,
 });
 
-function Callback() {
+function RouteComponent() {
   const { account, isPending, isAuthenticated } = useAccount();
 
   if (!isAuthenticated) {

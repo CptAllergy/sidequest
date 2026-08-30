@@ -32,12 +32,12 @@ import { useCreateAccount } from "@/hooks/use-create-account.ts";
 import { useAccount } from "@/hooks/use-account.ts";
 
 export const Route = createFileRoute("/auth/account")({
-  component: withAuthenticationRequired(Account),
+  component: withAuthenticationRequired(RouteComponent),
 });
 
 // TODO invalidate profile cache
 // TODO if account is already created redirect away from this page
-function Account() {
+function RouteComponent() {
   const { account, isPending } = useAccount();
 
   // TODO loading

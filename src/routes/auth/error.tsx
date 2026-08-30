@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/auth/error")({
-  component: Callback,
+  component: RouteComponent,
 });
 
 // TODO pretty up
-function Callback() {
+function RouteComponent() {
   return <>ERROR</>;
 }

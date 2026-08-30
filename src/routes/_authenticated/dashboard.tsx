@@ -3,10 +3,10 @@ import { useAuth } from "@zitadel/react-auth";
 import LogoutButton from "@/components/logout-button.tsx";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  component: Dashboard,
+  component: RouteComponent,
 });
 
-function Dashboard() {
+function RouteComponent() {
   const auth = useAuth();
 
   if (auth.isLoading) {

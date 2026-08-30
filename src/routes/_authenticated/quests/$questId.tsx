@@ -166,8 +166,7 @@ const NewEntry = ({ questId }: { questId: string }) => {
             </TabsList>
 
             <Card className="w-full rounded-tl-none border-2 border-dashed bg-transparent">
-              {/* TODO fix form ids*/}
-              <form id="form-new-quest" onSubmit={form.handleSubmit(onSubmit)}>
+              <form id="form-new-entry" onSubmit={form.handleSubmit(onSubmit)}>
                 <CardContent className="">
                   <FieldGroup>
                     <Controller
@@ -177,7 +176,7 @@ const NewEntry = ({ questId }: { questId: string }) => {
                         <Field data-invalid={fieldState.invalid}>
                           <Input
                             {...field}
-                            id="form-new-quest-username"
+                            id="form-new-entry-title"
                             placeholder="Title this entry..."
                             aria-invalid={fieldState.invalid}
                             required
@@ -195,7 +194,7 @@ const NewEntry = ({ questId }: { questId: string }) => {
                         <Field data-invalid={fieldState.invalid}>
                           <Textarea
                             {...field}
-                            id="form-new-quest-bio"
+                            id="form-new-entry-description"
                             placeholder="Record the day's event..."
                             rows={6}
                             className="min-h-24 resize-none"
@@ -218,6 +217,7 @@ const NewEntry = ({ questId }: { questId: string }) => {
                     size="sm"
                     className=""
                     type="submit"
+                    form="form-new-entry"
                   >
                     Inscribe Entry
                   </Button>

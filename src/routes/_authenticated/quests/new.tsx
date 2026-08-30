@@ -121,7 +121,6 @@ const NewQuestForm = () => {
     { label: "Canceled", value: "CANCELED" },
   ] as const;
 
-  // TODO fix IDs
   return (
     <CardContent>
       <form id="form-new-quest" onSubmit={form.handleSubmit(onSubmit)}>
@@ -135,10 +134,10 @@ const NewQuestForm = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-new-quest-username">Title</FieldLabel>
+                <FieldLabel htmlFor="form-new-quest-title">Title</FieldLabel>
                 <Input
                   {...field}
-                  id="form-new-quest-username"
+                  id="form-new-quest-title"
                   placeholder="e.g. The Witcher 3"
                   aria-invalid={fieldState.invalid}
                   required
@@ -154,16 +153,14 @@ const NewQuestForm = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-new-quest-display-name">
-                  Type
-                </FieldLabel>
+                <FieldLabel htmlFor="form-new-quest-type">Type</FieldLabel>
                 <Select
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger
-                    id="form-rhf-select-language"
+                    id="form-new-quest-type"
                     aria-invalid={fieldState.invalid}
                     className="min-w-[120px]"
                   >
@@ -188,16 +185,14 @@ const NewQuestForm = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-new-quest-display-name">
-                  Status
-                </FieldLabel>
+                <FieldLabel htmlFor="form-new-quest-status">Status</FieldLabel>
                 <Select
                   name={field.name}
                   value={field.value}
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger
-                    id="form-rhf-select-language"
+                    id="form-new-quest-status"
                     aria-invalid={fieldState.invalid}
                     className="min-w-[120px]"
                   >
@@ -222,12 +217,12 @@ const NewQuestForm = () => {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-new-quest-bio">
+                <FieldLabel htmlFor="form-new-quest-description">
                   Description
                 </FieldLabel>
                 <Textarea
                   {...field}
-                  id="form-new-quest-bio"
+                  id="form-new-quest-description"
                   placeholder="An account of your past deeds..."
                   rows={6}
                   className="min-h-24 resize-none"

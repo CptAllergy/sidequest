@@ -26,7 +26,7 @@ import { useAccount } from "@/hooks/use-account.ts";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_app/")({
   component: App,
 });
 

@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 
-export const Route = createFileRoute("/_authenticated/quests/new")({
+export const Route = createFileRoute("/_app/_authenticated/quests/new")({
   component: RouteComponent,
 });
 

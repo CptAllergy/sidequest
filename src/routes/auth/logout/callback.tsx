@@ -15,7 +15,7 @@ function RouteComponent() {
         const next = prev - 1;
         if (next <= 0) {
           window.clearInterval(timer);
-          navigate({ to: "/" });
+          void navigate({ to: "/" });
         }
         return next;
       });

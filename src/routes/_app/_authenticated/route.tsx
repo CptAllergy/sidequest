@@ -3,7 +3,7 @@ import { withAuthenticationRequired } from "@zitadel/react-auth";
 
 import { useAccount } from "@/hooks/use-account.ts";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createFileRoute("/_app/_authenticated")({
   component: withAuthenticationRequired(RouteComponent),
 });
 

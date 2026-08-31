@@ -8,7 +8,6 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // TODO review if this env load is legit
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
@@ -44,8 +43,7 @@ export default defineConfig(({ mode }) => {
         ].join(" "),
 
         // Permissions-Policy (Blocks browser features you aren't using)
-        "Permissions-Policy":
-          "geolocation=(), camera=(), microphone=(), geolocation=()",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
       },
     },
   };

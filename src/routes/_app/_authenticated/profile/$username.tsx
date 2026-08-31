@@ -3,7 +3,7 @@ import { useAuth } from "@zitadel/react-auth";
 import { useGetProfile } from "@/hooks/use-get-profile.ts";
 
 // TODO consider using loaders for this
-export const Route = createFileRoute("/_authenticated/profile/$username")({
+export const Route = createFileRoute("/_app/_authenticated/profile/$username")({
   component: RouteComponent,
 });
 

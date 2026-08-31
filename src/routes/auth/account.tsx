@@ -51,7 +51,7 @@ function RouteComponent() {
   }
 
   if (account.isAccountComplete) {
-    return <Navigate to={"/dashboard"} replace={true} />;
+    return <Navigate to={"/quests"} replace={true} />;
   }
 
   return (

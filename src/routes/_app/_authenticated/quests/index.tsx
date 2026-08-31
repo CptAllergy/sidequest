@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useGetAccountQuests } from "@/hooks/use-get-account-quests.ts";
 import { QuestCard } from "@/components/quests/quest-card.tsx";
 
-export const Route = createFileRoute("/_authenticated/quests/")({
+export const Route = createFileRoute("/_app/_authenticated/quests/")({
   component: RouteComponent,
 });
 

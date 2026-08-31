@@ -27,7 +27,7 @@ import { useCreateQuestEntry } from "@/hooks/use-create-quest-entry.ts";
 import { useGetQuestEntries } from "@/hooks/use-get-quest-entries.ts";
 
 // TODO consider using loaders for this
-export const Route = createFileRoute("/_authenticated/quests/$questId")({
+export const Route = createFileRoute("/_app/_authenticated/quests/$questId")({
   component: RouteComponent,
 });
 
@@ -138,7 +138,6 @@ const NewEntry = ({ questId }: { questId: string }) => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    console.log(data);
     createQuestEntryMutation.mutate(
       { createQuestEntryDto: data, questId },
       {
@@ -244,8 +243,6 @@ const QuestEntries = ({ questId }: { questId: string }) => {
     const contentObj = JSON.parse(jsonString);
     return { ...entry, content: contentObj };
   });
-
-  console.log(processedEntries);
 
   // const entries = [
   //   {

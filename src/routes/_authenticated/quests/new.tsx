@@ -2,6 +2,7 @@ import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
 import type { SubmitHandler } from "react-hook-form";
 import {
   Card,
@@ -93,15 +94,14 @@ const NewQuestForm = () => {
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     createQuestMutation.mutate(data, {
       onSuccess: (newQuest) => {
-        // TODO add some success toast
+        toast.success("Quest has been created.");
         void navigate({
           to: "/quests/$questId",
           params: { questId: newQuest.id },
         });
       },
       onError: () => {
-        // TODO show some error
-        console.error("Failed to create quest");
+        toast.error("Failed to create quest.");
       },
     });
   };

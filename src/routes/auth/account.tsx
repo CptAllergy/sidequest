@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { AtSign } from "lucide-react";
+import { toast } from "sonner";
 import type { SubmitHandler } from "react-hook-form";
 import {
   Field,
@@ -108,10 +109,11 @@ const AccountForm = () => {
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     createAccountMutation.mutate(data, {
       onSuccess: () => {
+        toast.error("Account has been created.");
         void navigate({ to: "/dashboard", replace: true });
       },
       onError: () => {
-        // TODO show some error
+        toast.error("Failed to create account.");
       },
     });
   };

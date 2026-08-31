@@ -4,6 +4,7 @@ import { format, parseISO } from "date-fns";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import type { SubmitHandler } from "react-hook-form";
 import type { QuestDto, QuestEntryDto } from "@/lib/types/dto.ts";
 import { useGetQuest } from "@/hooks/use-get-quest.ts";
@@ -142,12 +143,11 @@ const NewEntry = ({ questId }: { questId: string }) => {
       { createQuestEntryDto: data, questId },
       {
         onSuccess: () => {
-          // TODO add some success toast
-          // TODO update screen some animation or something
+          toast.success("Entry has been created.");
+          // TODO update screen some animation or something when loading the new entry (maybe fade in or scroll)
         },
         onError: () => {
-          // TODO show some error
-          console.error("Failed to create quest entry");
+          toast.error("Failed to create quest entry.");
         },
       },
     );

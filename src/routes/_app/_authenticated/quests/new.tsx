@@ -30,6 +30,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
+import { useDropzone } from "react-dropzone";
+import { ImageUpIcon } from "lucide-react";
+import { useCreatePresignedUpload } from "@/hooks/use-create-presigned-upload.ts";
 
 export const Route = createFileRoute("/_app/_authenticated/quests/new")({
   component: RouteComponent,
@@ -58,7 +61,15 @@ const NewQuestHeader = () => {
 
 const NewQuestForm = () => {
   const createQuestMutation = useCreateQuest();
+  const createPresignedUploadMutation = useCreatePresignedUpload();
   const navigate = useNavigate({ from: "/quests/new" });
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+  const files = acceptedFiles.map((file) => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
 
   // TODO check on these constraints
   const formSchema = z.object({
@@ -92,6 +103,9 @@ const NewQuestForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
+    // TODO figure out contentType
+    const x = createPresignedUploadMutation.mutate({ contentType: "image/png" });
+
     createQuestMutation.mutate(data, {
       onSuccess: (newQuest) => {
         toast.success("Quest has been created.");
@@ -125,9 +139,22 @@ const NewQuestForm = () => {
     <CardContent>
       <form id="form-new-quest" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
-          <div className="flex items-center justify-center">
-            <div className="mt-4 h-40 w-100 rounded-lg bg-black" />
-          </div>
+          <section className="container rounded-xl border-2 border-dashed">
+            <div
+              {...getRootProps({ className: "dropzone" })}
+              className="cursor-pointer p-8"
+            >
+              <input {...getInputProps()} />
+              <div className="flex flex-col items-center justify-center gap-2">
+                <ImageUpIcon />
+                <p className="text-sm">Drag or click to select image</p>
+              </div>
+            </div>
+          </section>
+          <aside>
+            <h4>Files</h4>
+            <ul>{files}</ul>
+          </aside>
           <FieldSeparator />
           <Controller
             name="title"

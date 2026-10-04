@@ -46,3 +46,14 @@ export type QuestEntryDto = {
   created_at: string;
   updated_at: string;
 };
+
+export type PresignedUploadDto = {
+  contentType: string;
+};
+
+export type PresignedUploadResponseDto = {
+  url: string;
+  imageKey: string;
+  // TODO consider the need for this fields, maybe remove it?? unsure if needed
+  // signedHeader: string;
+};

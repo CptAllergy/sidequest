@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
           "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com;",
           "font-src 'self' https://fonts.gstatic.com;",
           "frame-ancestors 'none';",
-          `connect-src 'self' ${env.VITE_ZITADEL_DOMAIN} ${env.VITE_API_URL};`,
+          `connect-src 'self' ${env.VITE_ZITADEL_DOMAIN} ${env.VITE_API_URL} ${env.VITE_STORAGE_ORIGIN};`,
           `img-src 'self' data: ${env.VITE_STORAGE_ORIGIN};`,
         ].join(" "),
 

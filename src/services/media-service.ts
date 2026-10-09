@@ -25,3 +25,17 @@ export const createPresignedUploadUrl = async (
 
   return (await res.json()) as PresignedUploadResponseDto;
 };
+
+export const uploadImage = async (url: string, file: File) => {
+  const res = await fetch(url, {
+    method: "PUT",
+    body: file,
+    headers: {
+      "Content-Type": file.type,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to upload image: ${res.status}`);
+  }
+};

@@ -9,6 +9,7 @@ export const useGetProfile = (username: string) => {
   const token = auth.user?.access_token;
 
   const { data, isPending } = useQuery<UserDto, Error>({
+    // TODO ALL KEYS SHOULD BE EXPORTED CONSTANTS
     queryKey: ["userProfile", username],
     queryFn: async () => {
       return await getUser(token!, username);

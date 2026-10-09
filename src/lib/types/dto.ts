@@ -24,10 +24,10 @@ export type CreateUserDto = {
 
 export type CreateQuestDto = {
   title: string;
-  description?: string;
+  description: string | null;
   type: string;
   status: string;
-  // imageUrl: string;
+  imageUrl: string | null;
 };
 
 // TODO think about during entry refactor

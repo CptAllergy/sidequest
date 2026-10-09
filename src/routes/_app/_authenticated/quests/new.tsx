@@ -3,7 +3,10 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { useDropzone } from "react-dropzone";
+import { ImageUpIcon } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
+import type { CreateQuestDto } from "@/lib/types/dto.ts";
 import {
   Card,
   CardContent,
@@ -30,9 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { useDropzone } from "react-dropzone";
-import { ImageUpIcon } from "lucide-react";
-import { useCreatePresignedUpload } from "@/hooks/use-create-presigned-upload.ts";
+import { useImageUpload } from "@/hooks/use-image-upload.ts";
 
 export const Route = createFileRoute("/_app/_authenticated/quests/new")({
   component: RouteComponent,
@@ -59,13 +60,34 @@ const NewQuestHeader = () => {
   );
 };
 
-const NewQuestForm = () => {
-  const createQuestMutation = useCreateQuest();
-  const createPresignedUploadMutation = useCreatePresignedUpload();
-  const navigate = useNavigate({ from: "/quests/new" });
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB TODO sync with backend
 
-  const files = acceptedFiles.map((file) => (
+const NewQuestForm = () => {
+  const navigate = useNavigate({ from: "/quests/new" });
+  const createQuest = useCreateQuest();
+  const uploadImage = useImageUpload();
+  const imageId = uploadImage.data ?? null;
+
+  // TODO rename this
+  const {
+    acceptedFiles: renameThis,
+    getRootProps,
+    getInputProps,
+  } = useDropzone({
+    multiple: false,
+    accept: { "image/jpeg": [], "image/png": [] },
+    maxSize: MAX_SIZE,
+    onDrop: (acceptedFiles, fileRejections) => {
+      if (fileRejections.length > 0) {
+        // TODO handle file rejection
+        return;
+      }
+      const selectedFile = acceptedFiles[0];
+      uploadImage.mutate(selectedFile);
+    },
+  });
+
+  const files = renameThis.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
@@ -103,10 +125,8 @@ const NewQuestForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    // TODO figure out contentType
-    const x = createPresignedUploadMutation.mutate({ contentType: "image/png" });
-
-    createQuestMutation.mutate(data, {
+    const createQuestData: CreateQuestDto = { ...data, imageUrl: imageId };
+    createQuest.mutate(createQuestData, {
       onSuccess: (newQuest) => {
         toast.success("Quest has been created.");
         void navigate({
@@ -189,7 +209,7 @@ const NewQuestForm = () => {
                   <SelectTrigger
                     id="form-new-quest-type"
                     aria-invalid={fieldState.invalid}
-                    className="min-w-[120px]"
+                    className="min-w-30"
                   >
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
@@ -221,7 +241,7 @@ const NewQuestForm = () => {
                   <SelectTrigger
                     id="form-new-quest-status"
                     aria-invalid={fieldState.invalid}
-                    className="min-w-[120px]"
+                    className="min-w-30"
                   >
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>

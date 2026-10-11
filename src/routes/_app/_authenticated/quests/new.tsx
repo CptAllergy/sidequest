@@ -68,6 +68,7 @@ const NewQuestForm = () => {
   const uploadImage = useImageUpload();
   const imageId = uploadImage.data ?? null;
 
+  // TODO improve the experience of uploading images, with previews, loading states, and error handling
   // TODO rename this
   const {
     acceptedFiles: renameThis,
@@ -75,7 +76,7 @@ const NewQuestForm = () => {
     getInputProps,
   } = useDropzone({
     multiple: false,
-    accept: { "image/jpeg": [], "image/png": [] },
+    // accept: { "image/jpeg": [], "image/png": [] },
     maxSize: MAX_SIZE,
     onDrop: (acceptedFiles, fileRejections) => {
       if (fileRejections.length > 0) {
@@ -125,7 +126,7 @@ const NewQuestForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    const createQuestData: CreateQuestDto = { ...data, imageUrl: imageId };
+    const createQuestData: CreateQuestDto = { ...data, imageKey: imageId };
     createQuest.mutate(createQuestData, {
       onSuccess: (newQuest) => {
         toast.success("Quest has been created.");

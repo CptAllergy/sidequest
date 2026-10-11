@@ -80,7 +80,7 @@ const QuestBanner = ({ quest }: { quest: QuestDto }) => {
           </Badge>
           <span className="flex items-center gap-1 text-sm">
             <ClockIcon size="13" />
-            Started {format(parseISO(quest.created_at), "d MMM, yyyy")}
+            Started {format(parseISO(quest.createdAt), "d MMM, yyyy")}
           </span>
         </div>
         <div className="flex justify-between">

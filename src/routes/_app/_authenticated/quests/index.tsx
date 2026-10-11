@@ -14,22 +14,11 @@ function RouteComponent() {
     return <div>Loading...</div>;
   }
 
-  const imgQuests = quests.map((quest) => {
-    if (!quest.image_url || quest.image_url === "") {
-      return {
-        ...quest,
-        image_url: undefined,
-      };
-    }
-
-    return quest;
-  });
-
   return (
     <section className="my-10 max-w-5xl">
       <div className="mx-auto space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <div className="grid grid-cols-4 gap-4">
-          {imgQuests.map((quest) => (
+          {quests.map((quest) => (
             <QuestCard key={quest.id} quest={quest} />
           ))}
         </div>

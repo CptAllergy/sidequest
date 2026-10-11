@@ -182,10 +182,10 @@ const QuestBoardPreviewSection = () => {
       description: "Description for Quest 1",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/elden_ring.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/elden_ring.png",
     },
     {
       id: "2",
@@ -193,10 +193,10 @@ const QuestBoardPreviewSection = () => {
       description: "Description for Quest 2",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/elden_ring.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/elden_ring.png",
     },
     {
       id: "3",
@@ -204,10 +204,10 @@ const QuestBoardPreviewSection = () => {
       description: "Description for Quest 3",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/player_piano.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/player_piano.png",
     },
     {
       id: "4",
@@ -215,10 +215,10 @@ const QuestBoardPreviewSection = () => {
       description: "Description for Quest 4",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/player_piano.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/player_piano.png",
     },
   ];
 
@@ -265,10 +265,10 @@ const ArchivedQuestsSection = () => {
       description: "Description for Quest 1",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/elden_ring.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/elden_ring.png",
     },
     {
       id: "2",
@@ -276,10 +276,10 @@ const ArchivedQuestsSection = () => {
       description: "Description for Quest 2",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/elden_ring.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/elden_ring.png",
     },
     {
       id: "3",
@@ -287,10 +287,10 @@ const ArchivedQuestsSection = () => {
       description: "Description for Quest 3",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/player_piano.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/player_piano.png",
     },
     {
       id: "4",
@@ -298,10 +298,10 @@ const ArchivedQuestsSection = () => {
       description: "Description for Quest 4",
       status: "completed",
       type: "main",
-      user_id: "user123",
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      image_url: "/player_piano.png",
+      userId: "user123",
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-02T00:00:00Z",
+      imageUrl: "/player_piano.png",
     },
   ];
 
@@ -326,8 +326,9 @@ const ArchivedQuestCard = ({ quest }: { quest: QuestDto }) => {
   return (
     <Card className="gap-2 overflow-hidden pt-0">
       <div className="relative">
+        {/* TODO review this fallback right here*/}
         <img
-          src={quest.image_url}
+          src={quest.imageUrl ?? "/fallback.png"}
           alt="Archived Quest"
           className="aspect-2/3 w-full object-cover object-center"
         />

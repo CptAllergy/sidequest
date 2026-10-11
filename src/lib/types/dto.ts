@@ -8,14 +8,14 @@ export type UserDto = {
 
 export type QuestDto = {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
-  description?: string;
+  description: string | null;
   type: string;
   status: string;
-  image_url?: string;
-  created_at: string;
-  updated_at: string;
+  imageUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CreateUserDto = {
@@ -27,7 +27,7 @@ export type CreateQuestDto = {
   description: string | null;
   type: string;
   status: string;
-  imageUrl: string | null;
+  imageKey: string | null;
 };
 
 // TODO think about during entry refactor

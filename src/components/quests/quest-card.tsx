@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge.tsx";
 
 export const QuestCard = ({ quest }: { quest: QuestDto }) => {
   // TODO Find better or create my own custom fallback image
-  const cardImage = quest.image_url ?? "/fallback.png";
+  const cardImage = quest.imageUrl ?? "/fallback.png";
 
   return (
     <Card className="gap-2 overflow-hidden pt-0">

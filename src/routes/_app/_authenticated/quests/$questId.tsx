@@ -6,7 +6,14 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import type { SubmitHandler } from "react-hook-form";
-import type { QuestDto, QuestEntryDto } from "@/lib/types/dto.ts";
+import type {
+  EntryImageContentResponse,
+  EntryLinkContent,
+  EntryStatusChangeContent,
+  EntryTextContent,
+  QuestEntryResponse,
+  QuestResponse,
+} from "@/lib/types/dto.ts";
 import { useGetQuest } from "@/hooks/use-get-quest.ts";
 import {
   Card,
@@ -69,7 +76,7 @@ function RouteComponent() {
 // };
 
 // TODO make this into a proper banner
-const QuestBanner = ({ quest }: { quest: QuestDto }) => {
+const QuestBanner = ({ quest }: { quest: QuestResponse }) => {
   return (
     <section className="w-full max-w-5xl">
       <div className="w-full space-y-4 px-4 text-left sm:px-6 lg:px-8">
@@ -139,7 +146,13 @@ const NewEntry = ({ questId }: { questId: string }) => {
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
     createQuestEntryMutation.mutate(
-      { createQuestEntryDto: data, questId },
+      {
+        createQuestEntryDto: {
+          type: "TEXT",
+          content: data,
+        },
+        questId,
+      },
       {
         onSuccess: () => {
           toast.success("Entry has been created.");
@@ -231,18 +244,11 @@ const NewEntry = ({ questId }: { questId: string }) => {
 };
 
 const QuestEntries = ({ questId }: { questId: string }) => {
-  const { questEntries, isPending } = useGetQuestEntries(questId);
+  const { entries, isPending } = useGetQuestEntries(questId);
 
-  if (isPending || !questEntries) {
+  if (isPending || !entries) {
     return <div>Loading</div>;
   }
-
-  // TODO fix this in the backend
-  const processedEntries = questEntries.map((entry) => {
-    const jsonString = atob(entry.content);
-    const contentObj = JSON.parse(jsonString);
-    return { ...entry, content: contentObj };
-  });
 
   // const entries = [
   //   {
@@ -273,8 +279,8 @@ const QuestEntries = ({ questId }: { questId: string }) => {
     <section className="w-full max-w-5xl">
       <div className="mx-auto space-y-4 px-4 text-left sm:px-6 lg:px-8">
         <div className="w-full space-y-4">
-          {processedEntries.map((entry, index) => (
-            <div key={index} className="flex items-start gap-12">
+          {entries.map((entry) => (
+            <div key={entry.id} className="flex items-start gap-12">
               <CircleIcon size={15} />
               <QuestEntry entry={entry} />
             </div>
@@ -286,16 +292,18 @@ const QuestEntries = ({ questId }: { questId: string }) => {
 };
 
 // TODO maybe can use props with children instead here
-const QuestEntry = ({ entry }: { entry: QuestEntryDto }) => {
+const QuestEntry = ({ entry }: { entry: QuestEntryResponse }) => {
   // TODO review how to do this "multiple possible component" setup maybe in a better way than a switch
   const entryComponent = (() => {
     switch (entry.type) {
       case "TEXT":
-        return <QuestEntryText entry={entry} />;
+        return <QuestEntryText content={entry.content} />;
       case "IMAGE":
-        return <QuestEntryImage entry={entry} />;
-      case "URL":
-        return <QuestEntryUrl entry={entry} />;
+        return <QuestEntryImage content={entry.content} />;
+      case "LINK":
+        return <QuestEntryLink content={entry.content} />;
+      case "STATUS_CHANGE":
+        return <QuestEntryStatusChange content={entry.content} />;
     }
   })();
 
@@ -303,7 +311,7 @@ const QuestEntry = ({ entry }: { entry: QuestEntryDto }) => {
     <Card className="w-full gap-0">
       <CardHeader className="w-full">
         <CardTitle className="text-sm">
-          {format(parseISO(entry.created_at), "d MMM, yyyy")}
+          {format(parseISO(entry.createdAt), "d MMM, yyyy")}
         </CardTitle>
         <CardAction>
           <Button size="sm" variant="ghost">
@@ -316,20 +324,24 @@ const QuestEntry = ({ entry }: { entry: QuestEntryDto }) => {
   );
 };
 
-const QuestEntryText = ({ entry }: { entry: QuestEntryDto }) => {
+const QuestEntryText = ({ content }: { content: EntryTextContent }) => {
   return (
     <>
-      <p className="text-2xl">{entry.content.title}</p>
-      <p className="text-muted-foreground">{entry.content.description}</p>
+      <p className="text-2xl">{content.title}</p>
+      <p className="text-muted-foreground">{content.description}</p>
     </>
   );
 };
 
-const QuestEntryImage = ({ entry }: { entry: QuestEntryDto }) => {
+const QuestEntryImage = ({
+  content,
+}: {
+  content: EntryImageContentResponse;
+}) => {
   return (
     <>
       <img
-        src={entry.content.image_url}
+        src={content.imageUrl}
         alt="User picture"
         className="aspect-3/1 w-full object-cover object-center"
       />
@@ -337,12 +349,25 @@ const QuestEntryImage = ({ entry }: { entry: QuestEntryDto }) => {
   );
 };
 
-const QuestEntryUrl = ({ entry }: { entry: QuestEntryDto }) => {
+const QuestEntryLink = ({ content }: { content: EntryLinkContent }) => {
   return (
     <>
-      <a href={entry.content.url} target="_blank">
-        {entry.content.url}
+      <a href={content.url} target="_blank">
+        {content.url}
       </a>
+    </>
+  );
+};
+
+const QuestEntryStatusChange = ({
+  content,
+}: {
+  content: EntryStatusChangeContent;
+}) => {
+  return (
+    <>
+      <p className="text-2xl">{content.oldStatus}</p>
+      <p className="text-muted-foreground">{content.newStatus}</p>
     </>
   );
 };

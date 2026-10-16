@@ -1,7 +1,7 @@
 // TODO review this code and replace with quest
 import { useAuth } from "@zitadel/react-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateQuestEntryDto } from "@/lib/types/dto.ts";
+import type { CreateQuestEntryRequest } from "@/lib/types/dto.ts";
 import { createQuestEntry } from "@/services/quest-service.ts";
 
 export const useCreateQuestEntry = () => {
@@ -14,7 +14,7 @@ export const useCreateQuestEntry = () => {
       createQuestEntryDto,
       questId,
     }: {
-      createQuestEntryDto: CreateQuestEntryDto;
+      createQuestEntryDto: CreateQuestEntryRequest;
       questId: string;
     }) => {
       if (!token) {
@@ -26,7 +26,7 @@ export const useCreateQuestEntry = () => {
     onSuccess: (questEntry) => {
       // TODO can probably optimize this so a full refetch isn't done for all the quests, could also use some optimistic cache updates
       void queryClient.invalidateQueries({
-        queryKey: ["questEntries", questEntry.quest_id],
+        queryKey: ["questEntries", questEntry.questId],
       });
     },
   });

@@ -1,7 +1,7 @@
 // TODO think about a better way to handle authorization across requests
 import { useAuth } from "@zitadel/react-auth";
 import { useQuery } from "@tanstack/react-query";
-import type { QuestDto } from "@/lib/types/dto.ts";
+import type { QuestResponse } from "@/lib/types/dto.ts";
 import { getAccountQuests } from "@/services/quest-service.ts";
 
 export const useGetAccountQuests = () => {
@@ -9,7 +9,7 @@ export const useGetAccountQuests = () => {
   const token = auth.user?.access_token;
   const userId = auth.user?.profile.sub;
 
-  const { data: quests, isPending } = useQuery<QuestDto[], Error>({
+  const { data: quests, isPending } = useQuery<QuestResponse[], Error>({
     queryKey: ["quests", userId],
     queryFn: async () => {
       return await getAccountQuests(token!);

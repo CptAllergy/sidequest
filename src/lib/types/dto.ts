@@ -6,7 +6,7 @@ export type UserDto = {
   bio: string;
 };
 
-export type QuestDto = {
+export type QuestResponse = {
   id: string;
   userId: string;
   title: string;
@@ -30,21 +30,61 @@ export type CreateQuestDto = {
   imageKey: string | null;
 };
 
-// TODO think about during entry refactor
-export type CreateQuestEntryDto = {
+export type CreateQuestEntryRequest =
+  | { type: "TEXT"; content: EntryTextContent }
+  | {
+      type: "IMAGE";
+      content: EntryImageContent;
+    }
+  | { type: "LINK"; content: EntryLinkContent };
+
+type QuestEntryResponseBase = {
+  id: string;
+  questId: string;
+  userId: string;
+  icon: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type QuestEntryResponse =
+  | (QuestEntryResponseBase & { type: "TEXT"; content: EntryTextContent })
+  | (QuestEntryResponseBase & {
+      type: "IMAGE";
+      content: EntryImageContentResponse;
+    })
+  | (QuestEntryResponseBase & { type: "LINK"; content: EntryLinkContent })
+  | (QuestEntryResponseBase & {
+      type: "STATUS_CHANGE";
+      content: EntryStatusChangeContent;
+    });
+
+export type EntryTextContent = {
   title: string;
   description: string;
 };
 
-// TODO remember to consider this in the refactor as well
-export type QuestEntryDto = {
-  id: string;
-  quest_id: string;
-  user_id: string;
-  type: string;
-  content: any;
-  created_at: string;
-  updated_at: string;
+export type EntryImageContent = {
+  title: string;
+  imageKey: string;
+  description: string;
+};
+
+export type EntryImageContentResponse = {
+  title: string;
+  imageUrl: string;
+  description: string;
+};
+
+export type EntryLinkContent = {
+  title: string;
+  url: string;
+  description: string;
+};
+
+export type EntryStatusChangeContent = {
+  oldStatus: string;
+  newStatus: string;
 };
 
 export type PresignedUploadDto = {

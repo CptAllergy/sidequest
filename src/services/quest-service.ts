@@ -1,14 +1,14 @@
 import type {
   CreateQuestDto,
-  CreateQuestEntryDto,
-  QuestDto,
-  QuestEntryDto,
+  CreateQuestEntryRequest,
+  QuestResponse,
+  QuestEntryResponse,
 } from "@/lib/types/dto.ts";
 
 export const createQuest = async (
   accessToken: string,
   createQuestDto: CreateQuestDto,
-): Promise<QuestDto> => {
+): Promise<QuestResponse> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`, {
     method: "POST",
     body: JSON.stringify(createQuestDto),
@@ -22,13 +22,13 @@ export const createQuest = async (
     throw new Error(`Failed to create quest: ${res.status}`);
   }
 
-  return (await res.json()) as QuestDto;
+  return (await res.json()) as QuestResponse;
 };
 
 export const getQuest = async (
   accessToken: string,
   questId: string,
-): Promise<QuestDto> => {
+): Promise<QuestResponse> => {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/api/v1/quests/${questId}`,
     {
@@ -44,12 +44,12 @@ export const getQuest = async (
     throw new Error("Unable to get quest");
   }
 
-  return (await res.json()) as QuestDto;
+  return (await res.json()) as QuestResponse;
 };
 
 export const getAccountQuests = async (
   accessToken: string,
-): Promise<QuestDto[]> => {
+): Promise<QuestResponse[]> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/quests`, {
     headers: {
       "Content-Type": "application/json",
@@ -62,14 +62,14 @@ export const getAccountQuests = async (
     throw new Error("Unable to get quest");
   }
 
-  return (await res.json()) as QuestDto[];
+  return (await res.json()) as QuestResponse[];
 };
 
 export const createQuestEntry = async (
   accessToken: string,
-  createQuestEntryDto: CreateQuestEntryDto,
+  createQuestEntryDto: CreateQuestEntryRequest,
   questId: string,
-): Promise<QuestEntryDto> => {
+): Promise<QuestEntryResponse> => {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/api/v1/quests/${questId}/entries`,
     {
@@ -86,13 +86,13 @@ export const createQuestEntry = async (
     throw new Error(`Failed to create quest: ${res.status}`);
   }
 
-  return (await res.json()) as QuestEntryDto;
+  return (await res.json()) as QuestEntryResponse;
 };
 
 export const getQuestEntries = async (
   accessToken: string,
   questId: string,
-): Promise<QuestEntryDto[]> => {
+): Promise<QuestEntryResponse[]> => {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/api/v1/quests/${questId}/entries`,
     {
@@ -108,5 +108,5 @@ export const getQuestEntries = async (
     throw new Error("Unable to get quest entries");
   }
 
-  return (await res.json()) as QuestEntryDto[];
+  return (await res.json()) as QuestEntryResponse[];
 };

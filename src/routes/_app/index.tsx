@@ -10,7 +10,7 @@ import {
   TrendingUpIcon,
   TvIcon,
 } from "lucide-react";
-import type { QuestDto } from "@/lib/types/dto.ts";
+import type { QuestResponse } from "@/lib/types/dto.ts";
 import {
   Card,
   CardContent,
@@ -175,7 +175,7 @@ const ActiveQuestSection = () => {
 };
 
 const QuestBoardPreviewSection = () => {
-  const quests: QuestDto[] = [
+  const quests: QuestResponse[] = [
     {
       id: "1",
       title: "Quest 1",
@@ -258,7 +258,7 @@ const QuestBoardPreviewSection = () => {
 
 // TODO I do like the idea of having an archived quests section to check things that have been completed already
 const ArchivedQuestsSection = () => {
-  const quests: QuestDto[] = [
+  const quests: QuestResponse[] = [
     {
       id: "1",
       title: "Quest 1",
@@ -322,7 +322,7 @@ const ArchivedQuestsSection = () => {
   );
 };
 
-const ArchivedQuestCard = ({ quest }: { quest: QuestDto }) => {
+const ArchivedQuestCard = ({ quest }: { quest: QuestResponse }) => {
   return (
     <Card className="gap-2 overflow-hidden pt-0">
       <div className="relative">

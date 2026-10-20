@@ -13,8 +13,7 @@ export const useImageUpload = () => {
   return useMutation({
     mutationFn: async (file: File) => {
       if (!token) {
-        // TODO handle
-        throw new Error("Unauthorized without token");
+        throw new Error("Missing access token");
       }
 
       const presignedUploadDto = { contentType: file.type };

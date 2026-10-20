@@ -29,8 +29,8 @@ import {
 } from "@/components/ui/input-group.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { useCreateAccount } from "@/hooks/use-create-account.ts";
-import { useAccount } from "@/hooks/use-account.ts";
+import { useCreateAccount } from "@/hooks/users/use-create-account.ts";
+import useAccount from "@/hooks/users/use-account.ts";
 
 export const Route = createFileRoute("/auth/account")({
   component: withAuthenticationRequired(RouteComponent),
@@ -39,11 +39,16 @@ export const Route = createFileRoute("/auth/account")({
 // TODO invalidate profile cache
 // TODO if account is already created redirect away from this page
 function RouteComponent() {
-  const { account, isPending } = useAccount();
+  const { data: account, isPending, isError } = useAccount();
 
-  // TODO loading
-  if (isPending || !account) {
-    return <div>Loading</div>;
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   if (!account.isSuccess) {

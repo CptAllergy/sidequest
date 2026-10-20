@@ -1,20 +1,26 @@
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 
-import { useAccount } from "@/hooks/use-account.ts";
+import useAccount from "@/hooks/users/use-account.ts";
 
 export const Route = createFileRoute("/auth/callback")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { account, isPending, isAuthenticated } = useAccount();
+  const { data: account, isPending, isError, isAuthenticated } = useAccount();
 
   if (!isAuthenticated) {
     return <Navigate to={"/"} replace={true} />;
   }
 
-  if (isPending || !account) {
-    return <div>Loading</div>;
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   if (!account.isSuccess) {

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 import { withAuthenticationRequired } from "@zitadel/react-auth";
 
-import { useAccount } from "@/hooks/use-account.ts";
+import useAccount from "@/hooks/users/use-account.ts";
 
 export const Route = createFileRoute("/_app/_authenticated")({
   component: withAuthenticationRequired(RouteComponent),
@@ -11,11 +11,16 @@ export const Route = createFileRoute("/_app/_authenticated")({
  * All routes under _authenticated are protected and require a full account
  */
 function RouteComponent() {
-  const { account, isPending } = useAccount();
+  const { data: account, isPending, isError } = useAccount();
 
-  // TODO do some loading animation
-  if (isPending || !account) {
-    return <div>Loading</div>;
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   if (!account.isSuccess) {

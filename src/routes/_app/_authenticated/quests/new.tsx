@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import { ImageUpIcon } from "lucide-react";
 import type { SubmitHandler } from "react-hook-form";
-import type { CreateQuestDto } from "@/lib/types/dto.ts";
+import type { CreateQuestRequest } from "@/lib/types/api/dto.ts";
 import {
   Card,
   CardContent,
@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { useCreateQuest } from "@/hooks/use-create-quest.ts";
+import { useCreateQuest } from "@/hooks/quests/use-create-quest.ts";
 import {
   Select,
   SelectContent,
@@ -33,7 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { useImageUpload } from "@/hooks/use-image-upload.ts";
+import { useImageUpload } from "@/hooks/media/use-image-upload.ts";
 
 export const Route = createFileRoute("/_app/_authenticated/quests/new")({
   component: RouteComponent,
@@ -65,8 +65,8 @@ const MAX_SIZE = 5 * 1024 * 1024; // 5MB TODO sync with backend
 const NewQuestForm = () => {
   const navigate = useNavigate({ from: "/quests/new" });
   const createQuest = useCreateQuest();
-  const uploadImage = useImageUpload();
-  const imageId = uploadImage.data ?? null;
+  const imageUpload = useImageUpload();
+  const imageId = imageUpload.data ?? null;
 
   // TODO improve the experience of uploading images, with previews, loading states, and error handling
   // TODO rename this
@@ -84,7 +84,7 @@ const NewQuestForm = () => {
         return;
       }
       const selectedFile = acceptedFiles[0];
-      uploadImage.mutate(selectedFile);
+      imageUpload.mutate(selectedFile);
     },
   });
 
@@ -126,7 +126,7 @@ const NewQuestForm = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    const createQuestData: CreateQuestDto = { ...data, imageKey: imageId };
+    const createQuestData: CreateQuestRequest = { ...data, imageKey: imageId };
     createQuest.mutate(createQuestData, {
       onSuccess: (newQuest) => {
         toast.success("Quest has been created.");

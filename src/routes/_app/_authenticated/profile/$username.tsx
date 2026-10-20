@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "@zitadel/react-auth";
-import { useGetProfile } from "@/hooks/use-get-profile.ts";
+import { useProfile } from "@/hooks/users/use-profile.ts";
 
 // TODO consider using loaders for this
 export const Route = createFileRoute("/_app/_authenticated/profile/$username")({
@@ -8,35 +7,28 @@ export const Route = createFileRoute("/_app/_authenticated/profile/$username")({
 });
 
 function RouteComponent() {
-  const auth = useAuth();
   const { username } = Route.useParams();
-  const { user } = useGetProfile(username);
+  const { data: profile, isPending, isError } = useProfile(username);
 
-  if (auth.isLoading) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gray-50">
-        <main className="flex-1 px-6 py-12">
-          <div className="flex min-h-screen items-center justify-center">
-            <p>Loading your session…</p>
-          </div>
-        </main>
-      </div>
-    );
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading...</div>;
   }
 
-  if (!user) {
-    return <div>User not found</div>;
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   return (
     <div>
       <div>
         <span>User ID:</span>
-        <span>{user.id}</span>
+        <span>{profile.id}</span>
       </div>
       <div>
         <span>Username:</span>
-        <span>{user.username}</span>
+        <span>{profile.username}</span>
       </div>
     </div>
   );

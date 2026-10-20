@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useMemo } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import type {
   EntryImageContentResponse,
@@ -13,8 +14,8 @@ import type {
   EntryTextContent,
   QuestEntryResponse,
   QuestResponse,
-} from "@/lib/types/dto.ts";
-import { useGetQuest } from "@/hooks/use-get-quest.ts";
+} from "@/lib/types/api/dto.ts";
+import { useQuest } from "@/hooks/quests/use-quest.ts";
 import {
   Card,
   CardAction,
@@ -30,8 +31,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
-import { useCreateQuestEntry } from "@/hooks/use-create-quest-entry.ts";
-import { useGetQuestEntries } from "@/hooks/use-get-quest-entries.ts";
+import { useCreateQuestEntry } from "@/hooks/quests/use-create-quest-entry.ts";
+import { useQuestEntries } from "@/hooks/quests/use-quest-entries.ts";
 
 // TODO consider using loaders for this
 export const Route = createFileRoute("/_app/_authenticated/quests/$questId")({
@@ -43,10 +44,16 @@ export const Route = createFileRoute("/_app/_authenticated/quests/$questId")({
 
 function RouteComponent() {
   const { questId } = Route.useParams();
-  const { quest } = useGetQuest(questId);
+  const { data: quest, isPending, isError } = useQuest(questId);
 
-  if (!quest) {
-    return <div>Quest not found</div>;
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   return (
@@ -124,7 +131,7 @@ const QuestBanner = ({ quest }: { quest: QuestResponse }) => {
 };
 
 const NewEntry = ({ questId }: { questId: string }) => {
-  const createQuestEntryMutation = useCreateQuestEntry();
+  const { mutate } = useCreateQuestEntry();
   // TODO check on these constraints
   const formSchema = z.object({
     title: z
@@ -145,7 +152,7 @@ const NewEntry = ({ questId }: { questId: string }) => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    createQuestEntryMutation.mutate(
+    mutate(
       {
         createQuestEntryDto: {
           type: "TEXT",
@@ -244,10 +251,32 @@ const NewEntry = ({ questId }: { questId: string }) => {
 };
 
 const QuestEntries = ({ questId }: { questId: string }) => {
-  const { entries, isPending } = useGetQuestEntries(questId);
+  const {
+    data,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useQuestEntries(questId);
 
-  if (isPending || !entries) {
+  const entries = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data?.pages],
+  );
+
+  // TODO loading animation or skeleton
+  if (isPending) {
     return <div>Loading</div>;
+  }
+
+  // TODO Error state
+  if (isError) {
+    return <div>Error state</div>;
+  }
+
+  if (entries.length === 0) {
+    return <div>No entries yet</div>;
   }
 
   // const entries = [
@@ -287,6 +316,13 @@ const QuestEntries = ({ questId }: { questId: string }) => {
           ))}
         </div>
       </div>
+      {hasNextPage && (
+        <div>
+          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+            {isFetchingNextPage ? "Loading..." : "Load more"}
+          </Button>
+        </div>
+      )}
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import type { UserDto } from "@/lib/types/dto.ts";
+import type { UserResponse } from "@/lib/types/api/dto.ts";
 
 export type Account = {
   /**
@@ -12,5 +12,5 @@ export type Account = {
   /**
    * The user object returned from the API.
    */
-  user?: UserDto;
+  user?: UserResponse;
 };

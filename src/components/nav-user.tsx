@@ -24,7 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { useAccount } from "@/hooks/use-account.ts";
+import useAccount from "@/hooks/users/use-account.ts";
 
 export function NavUser({
   user,
@@ -37,9 +37,20 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const auth = useAuth();
-  const { account } = useAccount();
+  const { data: account, isPending, isError } = useAccount();
 
-  if (!account || !account.isAccountComplete) {
+  // TODO this component shouldn't handle the disabled state from within itself, the parent shouldn't render it at all
+  if (isPending) {
+    return <div>waiting sign in...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
+  }
+
+  // TODO what to show while account isn't complete??
+  if (!account.isAccountComplete) {
     return null;
   }
 
@@ -69,7 +80,7 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
-                  {account.user && account.user.display_name}
+                  {account.user && account.user.displayName}
                 </span>
                 <span className="text-muted-foreground truncate text-xs">
                   {account.user && `@${account.user.username}`}

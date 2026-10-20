@@ -1,11 +1,11 @@
-import type { CreateUserDto, UserDto } from "@/lib/types/dto.ts";
+import type { CreateUserRequest, UserResponse } from "@/lib/types/api/dto.ts";
 
 import type { Account } from "@/lib/types/account.ts";
 
 export const createAccount = async (
   accessToken: string,
-  createUserDto: CreateUserDto,
-): Promise<UserDto> => {
+  createUserDto: CreateUserRequest,
+): Promise<UserResponse> => {
   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/users`, {
     method: "POST",
     body: JSON.stringify(createUserDto),
@@ -19,7 +19,7 @@ export const createAccount = async (
     throw new Error(`Failed to create profile: ${res.status}`);
   }
 
-  return (await res.json()) as UserDto;
+  return res.json();
 };
 
 export const getAccount = async (accessToken: string): Promise<Account> => {
@@ -38,14 +38,14 @@ export const getAccount = async (accessToken: string): Promise<Account> => {
     return { isSuccess: true, isAccountComplete: false };
   }
 
-  const user = (await res.json()) as UserDto;
+  const user = (await res.json()) as UserResponse;
   return { isSuccess: true, isAccountComplete: true, user };
 };
 
 export const getUser = async (
   accessToken: string,
   username: string,
-): Promise<UserDto> => {
+): Promise<UserResponse> => {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/api/v1/users/${username}`,
     {
@@ -61,5 +61,5 @@ export const getUser = async (
     throw new Error("Unable to get user");
   }
 
-  return (await res.json()) as UserDto;
+  return res.json();
 };

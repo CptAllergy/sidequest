@@ -1,6 +1,6 @@
 import { StarIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import type { QuestResponse } from "@/lib/types/dto.ts";
+import type { QuestResponse } from "@/lib/types/api/dto.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 

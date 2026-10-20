@@ -10,7 +10,7 @@ import {
   TrendingUpIcon,
   TvIcon,
 } from "lucide-react";
-import type { QuestResponse } from "@/lib/types/dto.ts";
+import type { QuestResponse } from "@/lib/types/api/dto.ts";
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils.ts";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import { ActiveQuest } from "@/components/home/active-quest.tsx";
 import { QuestCard } from "@/components/quests/quest-card.tsx";
-import { useAccount } from "@/hooks/use-account.ts";
+import useAccount from "@/hooks/users/use-account.ts";
 
 // TODO add tanstack default error component to absorb errors, it should do something similar to ErrorBoundary => setup errorComponent in RootRoute
 // TODO make sure routes are properly protected with full user
@@ -43,10 +43,17 @@ function App() {
 }
 
 const StatsSection = () => {
-  const { account, isPending } = useAccount();
+  // TODO get some stats to display
+  const { isPending, isError } = useAccount();
 
-  if (isPending || !account) {
-    return <div>Loading</div>;
+  // TODO loading animation or skeleton
+  if (isPending) {
+    return <div>Loading stats...</div>;
+  }
+
+  // TODO add not found or error page??
+  if (isError) {
+    return <div>Error UI</div>;
   }
 
   return (

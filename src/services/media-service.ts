@@ -1,12 +1,12 @@
 import type {
-  PresignedUploadDto,
-  PresignedUploadResponseDto,
-} from "@/lib/types/dto.ts";
+  PresignedUploadRequest,
+  PresignedUploadResponse,
+} from "@/lib/types/api/dto.ts";
 
 export const createPresignedUploadUrl = async (
   accessToken: string,
-  presignedUploadDto: PresignedUploadDto,
-): Promise<PresignedUploadResponseDto> => {
+  presignedUploadDto: PresignedUploadRequest,
+): Promise<PresignedUploadResponse> => {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/api/v1/uploads/presign`,
     {
@@ -23,7 +23,7 @@ export const createPresignedUploadUrl = async (
     throw new Error(`Failed to create upload url: ${res.status}`);
   }
 
-  return (await res.json()) as PresignedUploadResponseDto;
+  return res.json();
 };
 
 export const uploadImage = async (url: string, file: File) => {

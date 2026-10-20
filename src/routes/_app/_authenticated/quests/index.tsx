@@ -1,17 +1,48 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useGetAccountQuests } from "@/hooks/use-get-account-quests.ts";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo } from "react";
+import { useAccountQuests } from "@/hooks/quests/use-account-quests.ts";
 import { QuestCard } from "@/components/quests/quest-card.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 export const Route = createFileRoute("/_app/_authenticated/quests/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { quests, isPending } = useGetAccountQuests();
+  const {
+    data,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useAccountQuests();
 
-  // TODO loading
-  if (isPending || !quests) {
+  const quests = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data?.pages],
+  );
+
+  // TODO loading animation or skeleton
+  if (isPending) {
     return <div>Loading...</div>;
+  }
+
+  // TODO Error state
+  if (isError) {
+    return <div>Error state</div>;
+  }
+
+  if (quests.length === 0) {
+    return (
+      <div>
+        No quests yet. Click
+        <Link to="/quests/new" className="px-2 text-blue-600 underline">
+          here
+        </Link>
+        to create a new one
+      </div>
+    );
   }
 
   return (
@@ -23,6 +54,13 @@ function RouteComponent() {
           ))}
         </div>
       </div>
+      {hasNextPage && (
+        <div>
+          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+            {isFetchingNextPage ? "Loading..." : "Load more"}
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

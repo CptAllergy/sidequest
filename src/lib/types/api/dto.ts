@@ -1,9 +1,11 @@
-export type UserDto = {
+export type UserResponse = {
   id: string;
   username: string;
-  display_name: string;
-  avatar_url: string;
+  displayName: string;
+  avatarUrl: string;
   bio: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type QuestResponse = {
@@ -18,11 +20,11 @@ export type QuestResponse = {
   updatedAt: string;
 };
 
-export type CreateUserDto = {
+export type CreateUserRequest = {
   username: string;
 };
 
-export type CreateQuestDto = {
+export type CreateQuestRequest = {
   title: string;
   description: string | null;
   type: string;
@@ -87,13 +89,18 @@ export type EntryStatusChangeContent = {
   newStatus: string;
 };
 
-export type PresignedUploadDto = {
+export type PresignedUploadRequest = {
   contentType: string;
 };
 
-export type PresignedUploadResponseDto = {
+export type PresignedUploadResponse = {
   url: string;
   imageKey: string;
   // TODO consider the need for this fields, maybe remove it?? unsure if needed
   // signedHeader: string;
 };
+
+export interface CursorPage<T> {
+  items: T[];
+  nextCursor: string | null;
+}

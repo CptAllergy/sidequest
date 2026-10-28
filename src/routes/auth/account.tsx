@@ -85,12 +85,12 @@ const AccountForm = () => {
   const createAccountMutation = useCreateAccount();
   const navigate = useNavigate({ from: "/auth/account" });
 
-  // TODO check on these constraints
+  // TODO check on these constraints align all contraints with the backend values
   const formSchema = z.object({
     username: z
       .string()
       .min(4, "Username must be at least 4 characters.")
-      .max(32, "Username must be at most 32 characters.")
+      .max(30, "Username must be at most 30 characters.")
       .toLowerCase(),
     displayName: z
       .string()

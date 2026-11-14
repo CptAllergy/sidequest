@@ -17,12 +17,12 @@ export const useImageUpload = () => {
       }
 
       const presignedUploadDto = { contentType: file.type };
-      const { url, imageKey } = await createPresignedUploadUrl(
+      const { url, imageKey, headers } = await createPresignedUploadUrl(
         token,
         presignedUploadDto,
       );
 
-      await uploadImage(url, file);
+      await uploadImage(url, file, headers);
       return imageKey;
     },
     onSuccess: () => {

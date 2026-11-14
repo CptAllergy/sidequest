@@ -96,8 +96,7 @@ export type PresignedUploadRequest = {
 export type PresignedUploadResponse = {
   url: string;
   imageKey: string;
-  // TODO consider the need for this fields, maybe remove it?? unsure if needed
-  // signedHeader: string;
+  headers: Record<string, string>;
 };
 
 export interface CursorPage<T> {

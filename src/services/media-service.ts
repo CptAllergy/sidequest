@@ -26,13 +26,15 @@ export const createPresignedUploadUrl = async (
   return res.json();
 };
 
-export const uploadImage = async (url: string, file: File) => {
+export const uploadImage = async (
+  url: string,
+  file: File,
+  headers: Record<string, string>,
+) => {
   const res = await fetch(url, {
     method: "PUT",
     body: file,
-    headers: {
-      "Content-Type": file.type,
-    },
+    headers: headers,
   });
 
   if (!res.ok) {
